@@ -1,23 +1,13 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<sys/types.h>
-#include<fcntl.h>
-#include<sys/stat.h>
-#include<unistd.h>
-
-
-
-
-int main(){
+#include "restore.h"
 	
-	int fd = open("filenames.txt", O_RDONLY);
+	
+void read_file(char* fname, char* contents)	{
+	int fd = open(fname, O_RDWR);
 	struct stat* data = malloc(sizeof(struct stat));
-	//fstat(fd, data);
-	//stat("filenames.txt", data);
-	//size_t filesize = data->st_size;
-	size_t filesize = 1024;
-	char* buf = malloc(filesize);
-	read(fd, buf, filesize);
-	printf("%s", buf);
-	return 0;
+	fstat(fd, data);
+	size_t filesize = data->st_size;
+	contents = malloc(filesize);
+	read(fd, contents, filesize);
+	//printf("%s", contents);
+	return;
 }
