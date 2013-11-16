@@ -11,7 +11,7 @@
 #include <linux/fs.h>
 #include <asm/uaccess.h>
 #include <asm/unistd.h>
-#include <syscall.h>
+#include <linux/syscalls.h>
 
 #include "../../headers/project.h"
 
