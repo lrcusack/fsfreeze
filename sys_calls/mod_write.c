@@ -10,8 +10,7 @@
 #include <linux/module.h>
 #include <linux/fs.h>
 #include <asm/uaccess.h>
-#include <syscall.h>
-#include <unistd.h>
+#include <asm/unistd.h>
 
 #include "../headers/project.h"
 
