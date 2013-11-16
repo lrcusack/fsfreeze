@@ -10,21 +10,21 @@
 #include <linux/module.h>
 #include <linux/fs.h>
 #include <asm/uaccess.h>
-#include <linux/modversions.h>
-#include <sys/syscall.h> 
+#include <syscall.h>
 
 #include "../headers/project.h"
 
-extern void *sys_call_table[]; //make sys call table that the kernel can populate
+extern void* sys_call_table[]; //make sys call table that the kernel can populate
 
-asmlinkage int (*orig_write)(const char *, int, int); //ptr to original call
+asmlinkage int (*orig_write)(int fd, const void* buf, size_t count); //ptr to original call
 
 
-asmlinkage int 
-mod_sys_write(const char *filename, int flags, int mode)
-{
-	//if filename is in path, do the following
-	{	
+asmlinkage int  mod_sys_write(int fd, const void* buf, size_t count){
+	
+	printk("we're in");
+	
+	//if filename is in path, do the following{	
+		
 	// write filename and the type of change to a buffer
 		//char buffer[64];
 		//snprintf(LOG_FORMAT,63,filename,MODIFY);
@@ -39,22 +39,19 @@ mod_sys_write(const char *filename, int flags, int mode)
 	//signal userspace helper that it needs to log the file
 		
 	//wait for signal from userspace
-	}
+	//}
 	
-	return orig_write(filename, flags, mode); //complete the original operation
+	return orig_write(fd, buf, count); //complete the original operation
 }
 
-int init_module()
-{
+int init_module(){
   
-  orig_write = sys_call_table[__NR_write];
-  sys_call_table[__NR_write] = mod_sys_write;
+  orig_write = sys_call_table[__NR_write]; //get pointer to actual write function
+  sys_call_table[__NR_write] = mod_sys_write; //put pointer to our new function in sys_call table
   
   return 0;
 }
 
-void cleanup_module()
-{
-
+void cleanup_module(){
   sys_call_table[__NR_write] = orig_write;
 }  
