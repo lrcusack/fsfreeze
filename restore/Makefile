@@ -4,7 +4,7 @@ CFLAGS= -g -Wall
 all:
 	make restore
 
-restore:
+restore: restore.h
 	$(CC) $(CFLAGS) restore.c -o restore
 
 clean:

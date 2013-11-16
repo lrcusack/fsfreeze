@@ -1,3 +1,11 @@
+/**
+ * 
+ * test writing to and reading from chardev
+ * 
+ * @author Austin Blackman
+ * 
+ */
+
 #include<stdlib.h>
 #include<sys/types.h>
 #include<sys/stat.h>

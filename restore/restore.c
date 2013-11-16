@@ -1,7 +1,14 @@
-#include "restore.h"
+/**
+ * tool to restore frozen directory to freeze point
+ * 
+ * @author Liam Cusack
+ * 
+ */
+
+#include "../headers/restore.h"
 
 int main(){
-	restore("/freezedir/","/restoredir/","restorelog.txt",DELIM);
+	restore(FREEZEDIR,RESTOREDIR,LOG_NAME,DELIM);
 	return 0;
 }
 

@@ -1,3 +1,10 @@
+/**
+ * headers for restore function
+ * 
+ * @author Liam Cusack
+ * 
+ */
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<sys/types.h>
@@ -5,7 +12,6 @@
 #include<sys/stat.h>
 #include<unistd.h>
 #include<string.h>
-#define DELIM '\n'
 
 void restore(char* dest, char* source, char* logfile, char delim);
 void copy_files(char* dest, char* source);

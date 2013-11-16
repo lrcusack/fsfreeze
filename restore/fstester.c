@@ -1,3 +1,11 @@
+/**
+ * 
+ * program to perform all possible file system changes
+ * 
+ * @author Shawn Carrick
+ * 
+ */
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<unistd.h>

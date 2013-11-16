@@ -1,5 +1,10 @@
+/**
+ * This creates a character device for communication between the 
+ * 		kernel and userspace
+ */
+
 #include "chardev.h"
-//austin blackman
+
 /* Globals localized to file (by use of static */
 static int Major;		/* assigned to device driver */
 static char msg[BUF_LEN];	/* a stored message */
