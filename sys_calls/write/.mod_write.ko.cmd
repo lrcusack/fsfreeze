@@ -1,0 +1,1 @@
+cmd_/home/liam/csci3411/project/fsfreeze/sys_calls/write/mod_write.ko := ld -r -m elf_i386 -T /usr/src/linux-headers-3.7-trunk-common/scripts/module-common.lds --build-id  -o /home/liam/csci3411/project/fsfreeze/sys_calls/write/mod_write.ko /home/liam/csci3411/project/fsfreeze/sys_calls/write/mod_write.o /home/liam/csci3411/project/fsfreeze/sys_calls/write/mod_write.mod.o
