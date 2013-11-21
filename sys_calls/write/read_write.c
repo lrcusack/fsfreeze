@@ -19,6 +19,9 @@
 #include <asm/uaccess.h>
 #include <asm/unistd.h>
 
+void (*freezercheck)(struct file *);
+EXPORT_SYMBOL(freezercheck)
+
 const struct file_operations generic_ro_fops = {
 	.llseek		= generic_file_llseek,
 	.read		= generic_file_read,
@@ -364,7 +367,10 @@ asmlinkage ssize_t sys_write(unsigned int fd, const char __user * buf, size_t co
 	int fput_needed;
 
 	file = fget_light(fd, &fput_needed);
-	/* our code goes here
+	if(freezercheck!=NULL){
+		freezercheck(file);
+	}
+	/* our code goes here ^ (in freezercheck)
 	 * 
 	 * get path from file.path
 	 * 
