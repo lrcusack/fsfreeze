@@ -1,1 +1,0 @@
-cmd_/root/Desktop/project_testing/chardev.ko := ld -m elf_i386 -m elf_i386 -r -o /root/Desktop/project_testing/chardev.ko /root/Desktop/project_testing/chardev.o /root/Desktop/project_testing/chardev.mod.o
