@@ -1,0 +1,21 @@
+#include<stdlib.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<fcntl.h>
+#include<stdio.h>
+
+
+int main(){
+	int fd;
+	char stuff[10];
+	char other[10];
+	snprintf(stuff,sizeof("my name is"));
+	printf("%s \n",other);
+	fd = open("/dev/filename_holder",O_RDWR);
+	write(fd, stuff, sizeof(stuff));
+	printf("%s \n",other);
+	read(fd, other, sizeof(other));
+	printf("%s \n",other);
+	return 0;
+
+}
