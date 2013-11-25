@@ -8,6 +8,7 @@
 /* Globals localized to file (by use of static */
 static int Major;		/* assigned to device driver */
 static char msg[BUF_LEN];	/* a stored message */
+extern void (*freezercheck)(struct file *);
 
 static struct file_operations fops = {
 	.read = device_read,
@@ -67,6 +68,15 @@ static ssize_t device_read(struct file *filp, char *buffer, size_t len,
 	return copy_len - amnt_copied;
 }
 
+void freezerfct(struct file* f){
+	
+	
+	
+	
+	
+	return;
+}
+
 int init_module(void)
 {
 	Major = register_chrdev(0, DEVICE_NAME, &fops);
@@ -79,6 +89,8 @@ int init_module(void)
 	memset(msg, '+', BUF_LEN);
 	printk(KERN_INFO "chardev is assigned to major number %d.\n",
 	       Major);
+	       
+	freezercheck = &freezerfct;
 
 	return 0;
 }

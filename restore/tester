@@ -1,0 +1,10 @@
+#!/bin/bash
+
+ls > /freezer/file1.txt
+ls > /freezer/file2.dat
+ls > /freezer/file3.pdf
+
+rm /freezer/sample.txt
+
+cp logfile.txt /freezer_restore/
+cp sample.txt /freezer_restore/
