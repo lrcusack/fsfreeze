@@ -21,10 +21,11 @@ static struct file_operations fops = {
 
 static int device_open(struct inode *inode, struct file *file)
 {
+	printf(KERN_WARNING "trying to printk something\n");
 	try_module_get(THIS_MODULE);
-	printk("trying to create klist\n");
+	printk(KERN_DEBUG "trying to create klist\n");
 	filenames = kq_create();
-	printk("created klist\n");
+	printk(KERN_DEBUG "created klist\n");
 	return 0;
 }
 
