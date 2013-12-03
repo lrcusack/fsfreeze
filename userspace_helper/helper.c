@@ -24,8 +24,6 @@ int main(){
 }
 
 void helper(){
-	
-	chdir(FREEZEDIR);
 
 	char* fname;
 	char readbuf[BUFLEN];
@@ -135,9 +133,9 @@ void testerfct(){
 	
 	printf("%s\n",fname);
 	printf("%c\n",type);
-	*/
 	
-	/* //Test handle_change, write_to_log, and make_clean_copy; all checked out
+	
+	 //Test handle_change, write_to_log, and make_clean_copy; all checked out
 	handle_change('C', "sample.txt");
 	handle_change('M', "sample.txt");
 	handle_change('D', "sample.txt");
