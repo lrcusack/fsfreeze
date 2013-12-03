@@ -15,28 +15,66 @@ int main(){
 
 void restore(char* dest, char* source, char* logfile, char delim){
 	llqueue* ll = parse_log_file(logfile,delim);
-	delete_files(ll);
-	copy_files(dest,source);	
+	delete_logged_files(ll, dest);
+	copy_files(dest,source);
+	delete_copied_files(source);
 	return;
 }
 
 void copy_files(char* dest, char* source){
 	//copy all files from source directory to dest directory
+	DIR* derp;
+	struct dirent* dp;
+	char outfilename[BUFLEN];
+	char infilename[BUFLEN];
+	FILE* copyfile;
+	FILE* oldfile;
 	
-	
-	
+	derp = opendir(source);
+	while ((dp = readdir(derp)) != NULL){
+		//fname is in dp->d_name
+		if (strcmp(dp->d_name, LOG_FILE) && strcmp(dp->d_name, ".") && strcmp(dp->d_name, "..")){
+			
+			sprintf(outfilename, "%s%s", dest, dp->d_name);
+			copyfile = fopen(outfilename,"w");
+			if(copyfile == NULL){
+				printf("cannot open output file\n");
+				fclose(copyfile);
+				return;
+			}
+			
+			sprintf(infilename, "%s%s", source, dp->d_name);
+			oldfile = fopen(infilename,"rb");
+			if(oldfile == NULL){
+				printf("cannot open input file \n");
+				fclose(copyfile);
+				fclose(oldfile);
+				return;
+			}
+		
+			char c;
+			while((c = fgetc(oldfile)) != EOF){
+				fputc(c,copyfile);
+			}
+			
+			fclose(copyfile);
+			fclose(oldfile); 
+		}
+	}
+	closedir(derp);
 	return;
 }
 
-void delete_files(llqueue* files){
+void delete_logged_files(llqueue* files, char* location){
 	char* fname = NULL;
+	char namebuf[BUFLEN];
 	while((fname = ll_dequeue(files))){
 		//delete file with name fname
-		unlink(fname);
+		sprintf(namebuf, "%s%s", location, fname);
+		unlink(namebuf);
+		free(fname);
 		//printf("%s\n", fname);
 	}
-	
-	
 	return;
 }
 	
@@ -62,4 +100,19 @@ llqueue* parse_log_file(char* fname, char delim){
 	fclose(logfile);
 
 	return ll;
+}
+
+void delete_copied_files(char* location){
+	DIR* derp;
+	struct dirent* dp;
+	char filedel[BUFLEN];
+	derp = opendir(location);
+	while ((dp = readdir(derp)) != NULL){
+		if (strcmp(dp->d_name, ".") && strcmp(dp->d_name, "..")){
+			sprintf(filedel, "%s%s", location, dp->d_name);
+			unlink(filedel);
+		}
+	}
+	closedir(derp);
+	return;
 }

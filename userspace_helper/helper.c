@@ -101,7 +101,7 @@ void make_clean_copy(char type, char* file_name){
 	}
 	
 	FILE* oldfile;
-	oldfile = fopen(file_name,"rb");
+	oldfile = fopen(file_name,"r");
 	if(oldfile == NULL){
 		printf("cannot open input file \n");
 		fclose(copyfile);
