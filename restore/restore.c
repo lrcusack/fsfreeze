@@ -5,7 +5,8 @@
  * 
  */
 
-#include "../headers/restore.h"
+
+#include "restore.h"
 
 int main(){
 	restore(FREEZEDIR,RESTOREDIR,LOG_NAME,DELIM);
@@ -28,9 +29,10 @@ void copy_files(char* dest, char* source){
 }
 
 void delete_files(llqueue* files){
-	char* fname;
-	while(ll_dequeue(ll,fname)){
+	char* fname = NULL;
+	while(ll_dequeue(files, (void**) &fname)){
 		//delete file with name fname
+		//printf("%s\n", fname);
 	}
 	
 	
@@ -38,49 +40,25 @@ void delete_files(llqueue* files){
 }
 	
 llqueue* parse_log_file(char* fname, char delim){
-	char* filetext;
+
+	char namebuf[BUFLEN];
 	char* new_fname;
-	int len;
+
 	llqueue* ll = ll_create();
-
-	read_file(fname, filetext);//get full log file text
-	
-	while(len = next_token(&filetext, new_fname, delim)){
-		ll_enqueue(ll,new_fname); //put new filename in linked list
+	FILE* logfile = fopen(fname, "r");
+	if(logfile == NULL){
+		printf("could not open log file\n");
+		fclose(logfile);
+		return ll;
 	}
 
-	free(filetext);//release memory for full file text
+	while(EOF != fscanf(logfile, "%s", namebuf)){
+		new_fname = (char*) malloc(sizeof(char) * strlen(namebuf));
+		strcpy(new_fname, namebuf);
+		//printf("%s\n", new_fname);
+		ll_enqueue(ll, new_fname);
+	}
+	fclose(logfile);
+
 	return ll;
-}
-
-int next_token(char** text, char* token, char delim){
-	int ii;
-	int end=0;
-	while(){//iterate over text until delimiter or end of file is found
-		ii++;
-		char current = *(*text+ii);
-		if (current == EOF) break;
-		if (current == delim) break;
-	}
-	if(0==ii) return -1;//if it has reached the end of the file or an empty token, return -1
-
-	token=(char*)malloc(ii); //make space for token string plus end of string char.
-	snprintf(token, *text, ii-1);//put the token string in the token pointer, do not include delimiter
-
-	*text= *text + ii + 1; //offsets the pointer to the beginning of the text to the beginning of the next token
-	return ii; //return length of token
-}
-	
-void read_file(char* fname, char* contents){
-	int fd = open(fname, O_RDWR);
-
-	struct stat* data = malloc(sizeof(struct stat));
-	fstat(fd, data);//get size of file
-	size_t filesize = data->st_size;
-
-	contents = malloc(filesize);
-	read(fd, contents, filesize);//read entire file
-	//printf("%s", contents);
-	return;
-
 }

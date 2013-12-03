@@ -12,9 +12,4 @@
 #define DELIM '\n'
 #define BUFLEN 64
 
-typedef enum{
-	CREATE,
-	MODIFY,
-	DELETE
-} change_type_t;
 

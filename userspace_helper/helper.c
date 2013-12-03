@@ -12,7 +12,7 @@
 #include "helper.h"
 
 
-//#define TEST
+#define TEST
 
 int main(){
 #ifdef TEST	
@@ -24,6 +24,8 @@ int main(){
 }
 
 void helper(){
+	
+	chdir(FREEZEDIR);
 
 	char* fname;
 	char readbuf[BUFLEN];
@@ -79,8 +81,7 @@ void write_to_log(char type, char* file_name){
 		return;
 	}
 	
-	fprintf(f, LOG_FORMAT, type, file_name);
-	fprintf(f, "\n");
+	fprintf(f, "%s\n", file_name);
 	fclose(f);
 	return;
 }
@@ -89,7 +90,6 @@ void make_clean_copy(char type, char* file_name){
 
 	char* output_file = malloc((strlen(RESTOREDIR)+strlen(file_name))*sizeof(char));
 	sprintf(output_file,"%s%s",RESTOREDIR, file_name);
-	printf(" output file name is: %s \n",output_file);
 	
 	FILE* copyfile;
 	
