@@ -30,8 +30,9 @@ void copy_files(char* dest, char* source){
 
 void delete_files(llqueue* files){
 	char* fname = NULL;
-	while(ll_dequeue(files, (void**) &fname)){
+	while((fname = ll_dequeue(files))){
 		//delete file with name fname
+		unlink(fname);
 		//printf("%s\n", fname);
 	}
 	
@@ -53,7 +54,7 @@ llqueue* parse_log_file(char* fname, char delim){
 	}
 
 	while(EOF != fscanf(logfile, "%s", namebuf)){
-		new_fname = (char*) malloc(sizeof(char) * strlen(namebuf));
+		new_fname = (char*) malloc (sizeof(char)* strlen(namebuf));
 		strcpy(new_fname, namebuf);
 		//printf("%s\n", new_fname);
 		ll_enqueue(ll, new_fname);

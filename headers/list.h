@@ -72,19 +72,19 @@ static inline int ll_enqueue( llqueue *ll, void* value){
 }
 
 
-static inline int ll_dequeue( llqueue *ll, void** element){
+static inline void* ll_dequeue( llqueue *ll){
 	
-	if(0==ll->length) return 0;
+	if(0==ll->length) return NULL;
 	
 	node* pop =ll->head;
 	
-	*element = pop->val;
+	void* element = pop->val;
 	ll->head=ll->head->next;
 	
 	ll->length--;
 	free(pop);
 
-	return 1;
+	return element;
 
 	//for edge case were list is empty, return 0
 }
