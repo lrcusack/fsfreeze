@@ -8,7 +8,7 @@
 #define FREEZEDIR "/freezer/"
 #define RESTOREDIR "/freezer_restore/"
 #define LOG_NAME "logfile.txt"
-#define LOG_FORMAT "%d %s"
+#define LOG_FORMAT " %c %s"
 #define DELIM '\n'
 
 typedef enum{

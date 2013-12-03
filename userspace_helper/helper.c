@@ -1,99 +1,104 @@
-//### austin blackman ###*/
+/**
+ * Userspace Helper
+ * 
+ * This is the code to implement the userspace helper that logs and 
+ * copies files.
+ * 
+ * @author Liam Cusack
+ * @author Austin Blackman
+ * 
+ */
 
+#include "helper.h"
 
-#include "../headers/project.h"
-#include<stdlib.h>
-#include<stdio.h>
-#include<string.h>
-FILE *f;
-FILE *f2;
-char ch;
+int main(){
+	helper();
+	return 0;
+}
 
+void helper(){
+	int len = 10;
+	char* fname;
+	char readbuf[64];
+	char namebuf[64];
+	char donebuf[64];
+	char type;
+	
+	while(1){
+		while(read(fd,readbuf,len)==0){};
+		
+		//parse buf
+		sscanf(buf, LOG_FORMAT, &type, namebuf);
+		fname = (char*) malloc( strlen(namebuf) * sizeof(char) );
+		sprintf( fname, namebuf);
+		
+		handle_change( type, fname );
+		write(fd, donebuf, len);
+	}
+	
+	return; //NEVAAHHHHHHHH
+}
 
+void handle_change(char type, char* file_name){
+		
+		switch(type)
+		case 'C': //Copy
+			write_to_log('C',file_name);
+			break;
+					
+		case 'M': //Modify
+			write_to_log('M',file_name);
+			make_clean_copy('M',file_name);
+			break;
+		
+		case 'D': //Delete
+			make_clean_copy('D',file_name);
+			break;
+}
 
-//
-void write_to_log(char type,FILE* file_name){
+void write_to_log(char type, char* file_name){
 	
 			
-	f = fopen("logfile.txt","w");
+	f = fopen(LOG_NAME,"a");
 			
 	if(f == NULL){
 		printf("error opening file!\n");
-		exit(1);
-		}
-			
-	const char *text = " writing under write_to_log";
-	fprintf(f," some text: %s\n",text);
-	fclose(f);		
+		return;
+	}
+
+	fprintf(f, LOG_FORMAT, type, file_name);
+	fclose(f);
+	return;
 }
 
-
-//will pass in a filename complete with full path...needs to
-//take that in and make a full copy of the file to the restore directory listed in headers.h
 void make_clean_copy(char type, char* file_name){
 
-	FILE *str, *cptr;
-	if((str = fopen(file_name,"rb"))==NULL){
-		fprintf(stderr, "cannot read file \n");
-	}
-	
 	char* output_file = malloc((strlen(RESTOREDIR)+strlen(file_name))*sizeof(char));
-	
-	 sprintf(output_file,"%s%s",RESTOREDIR,file_name);
-	 printf(" output file name is: %s \n",output_file);
-	 cptr = fopen(output_file,"rb");
-	/*if((cptr = fopen(output_file,"wb"))==NULL){
-		fprintf(stderr,"cnnot open output file\n");
-	}*/
+	sprintf(output_file,"%s%s",RESTOREDIR, file_name);
 	printf(" output file name is: %s \n",output_file);
-	char b[2];
-	int i;
-	long size = ftell(str);
 	
-	for(i = 0;i<size;i++){
-		fread(b,1,1,str);
-		fwrite(b,1,1,cptr);
+	FILE* copyfile;
+	
+	copyfile = fopen(output_file,"w");
+	if(copyfile == NULL){
+		printf("cannot open output file\n");
+		return;
 	}
 	
-	fclose(str);
-	fclose(cptr); 
+	FILE* oldfile;
+	oldfile = fopen(file_name,"rb");
+	if(oldfile == NULL){
+		printf("cannot open input file \n");
+		return;
+	}
 
-}
-
-
-//pass a filename into this function (FILE*)
-//
-void handle_change(char type, FILE* file_name){
-		//create
-		if(type == 'C'){
-			
-			//write fname to LOG_NAME (using LOG_FORMAT)
-			write_to_log('C',file_name);
-		}
-		
-		//modify			
-		else if(type == 'M'){
-			//write fname to LOG_NAME (using LOG_FORMAT)
-			//save a copy of fname to RESTOREDIR
-			
-			//this option does the original write in write_to_log then closes the file
-			//after that, this method opens both the original log and the copy file and copys the original to the copy as a backup
-			write_to_log('M',file_name);
-			//make_clean_copy('M',file_name);
-		}
-		
-		//delete
-		else if (type == 'D'){
-			//save a copy of fname to RESTOREDIR
-			//make_clean_copy('D',file_name);
-			
-		}
-}
-
-
-int main(){
-	//handle_change('M',file_name);
+	char c;
+	while((c = fgetc(oldfile)) != EOF){
+		fputc(c,copyfile);
+	}
 	
-	make_clean_copy('M',"logfile.txt");
-	return 0;
+	fclose(copyfile);
+	fclose(oldfile); 
+
+	return;
 }
