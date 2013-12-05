@@ -74,13 +74,11 @@ static inline int kq_enqueue( kqueue *kq, void* value){
 
 
 static inline void* kq_dequeue( kqueue *kq){
-	
+	void* element;
+	struct node* pop;
 	if(0==kq->length) return NULL;
 	
-	struct node* pop;
 	pop = kq->head;
-	
-	void* element;
 	element = pop->val;
 	kq->head=kq->head->next;
 	

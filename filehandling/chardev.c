@@ -55,30 +55,19 @@ static ssize_t device_write(struct file *filp, const char *buff,
 static ssize_t device_read(struct file *filp, char *buffer, size_t len,
 			   loff_t * offset)
 {
-	//printk("filp->f_dentry->d_name.name %s\n", filp->f_dentry->d_name.name);
-	//printk("filp->f_dentry->d_parent->d_name.name %s\n", filp->f_dentry->d_parent->d_name.name);
-	//printk("filp->f_dentry->d_parent->d_parent->d_name.name %s\n", filp->f_dentry->d_parent->d_parent->d_name.name);
-	//printk("%d",PATH_MAX);
-	
-	/* //code for determining if it is in the path
-	struct dentry current = filp->f_dentry;
-	char fname[PATH_MAX];
-	char type = 'M';
-	while(strcmp(current->d_parent->d_name.name)){
-		//push current->d_parent->d_name.name onto a stack
-		current = current->d_parent;
-	}
-	//put stack into fname variable
-	if(!strcmp(FREEZEDIR, current->d_name.name)){
-		freezerfct(type, fname);
-	}
-	
-	
-	*/
+
 	
 	return 0;
 	
+	/*our read code
+	char* fname = kq_dequeue(filenames);
+	if(fname==NULL) return 0;
+	sprintf(buffer, "%s", fname);
+	return strlen(buffer);
+	*/
+	
 	/* actual read
+	
 	unsigned long amnt_copied;
 	int amnt_left = BUF_LEN - *offset;
 	char *copy_position = msg + *offset;
@@ -101,14 +90,34 @@ static ssize_t device_read(struct file *filp, char *buffer, size_t len,
 	
 }
 
-//void freezerfuct(struct file* f){
+/*
+void freezerfunct(struct file* f){
+	
+	//printk("filp->f_dentry->d_name.name %s\n", filp->f_dentry->d_name.name);
+	//printk("filp->f_dentry->d_parent->d_name.name %s\n", filp->f_dentry->d_parent->d_name.name);
+	//printk("filp->f_dentry->d_parent->d_parent->d_name.name %s\n", filp->f_dentry->d_parent->d_parent->d_name.name);
+	
+	//code for determining if it is in the path
+	
+	struct dentry current = filp->f_dentry;
+	char fname[PATH_MAX];
+	char type = 'M';
+	while(strcmp(current->d_parent->d_name.name)){
+		//push current->d_parent->d_name.name onto a stack
+		current = current->d_parent;
+	}
+	//put stack into fname variable
+	if(!strcmp(FREEZEDIR, current->d_name.name)){
+		freezerfct(type, fname);
+	}	
 	
 	
 	
 	
 	
-	//return;
-//}
+	return;
+}
+*/
 
 int init_module(void)
 {
