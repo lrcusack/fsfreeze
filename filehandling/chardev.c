@@ -8,7 +8,7 @@
 /* Globals localized to file (by use of static */
 static int Major;		/* assigned to device driver */
 static char msg[BUF_LEN];	/* a stored message */
-extern void (*freezercheck)(struct file *);
+extern void (*freezerfct)(struct file *);
 
 static struct file_operations fops = {
 	.read = device_read,
