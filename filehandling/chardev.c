@@ -48,24 +48,30 @@ static ssize_t device_write(struct file *filp, const char *buff,
 static ssize_t device_read(struct file *filp, char *buffer, size_t len,
 			   loff_t * offset)
 {
+	printk("%s",buffer);
+	return 0;
+	
+	/* actual read
 	unsigned long amnt_copied;
 	int amnt_left = BUF_LEN - *offset;
 	char *copy_position = msg + *offset;
 	int copy_len = len > amnt_left ? amnt_left : len;
 
-	/* are we at the end of the buffer? */
+	//are we at the end of the buffer?
 	if (amnt_left <= 0)
 		return 0;
 
-	/* NOTE: copy_to_user returns the amount of bytes _not_ copied */
+	// NOTE: copy_to_user returns the amount of bytes _not_ copied
 	amnt_copied = copy_to_user(buffer, copy_position, copy_len);
 	if (copy_len == amnt_copied)
 		return -EINVAL;
 
-	/* adjust the offset for this process */
+	// adjust the offset for this process
 	*offset += copy_len;
 
 	return copy_len - amnt_copied;
+	*/
+	
 }
 
 //void freezerfuct(struct file* f){
