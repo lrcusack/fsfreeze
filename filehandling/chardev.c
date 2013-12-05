@@ -48,7 +48,7 @@ static ssize_t device_write(struct file *filp, const char *buff,
 static ssize_t device_read(struct file *filp, char *buffer, size_t len,
 			   loff_t * offset)
 {
-	printk("%s",buffer);
+	printk("aw yea git some");
 	return 0;
 	
 	/* actual read
