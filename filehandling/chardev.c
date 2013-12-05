@@ -10,6 +10,8 @@ static int Major;		/* assigned to device driver */
 static char msg[BUF_LEN];	/* a stored message */
 //extern void (*freezerfct)(struct file *);
 
+kqueue* filenames;
+
 static struct file_operations fops = {
 	.read = device_read,
 	.write = device_write,
@@ -20,13 +22,18 @@ static struct file_operations fops = {
 static int device_open(struct inode *inode, struct file *file)
 {
 	try_module_get(THIS_MODULE);
-
+	printk("trying to create klist\n");
+	filenames = kq_create();
+	printk("created klist\n");
 	return 0;
 }
 
 static int device_release(struct inode *inode, struct file *file)
 {
 	module_put(THIS_MODULE);
+	printk("trying to delete klist\n");
+	kq_delete(filenames);
+	printk("deleted klist\n");
 	return 0;
 }
 

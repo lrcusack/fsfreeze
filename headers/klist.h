@@ -2,7 +2,7 @@
 #include<linux/gfp.h>
 
 
-typedef struct struct node{
+typedef struct node{
 	void* val;
 	struct node* next;
 } node;
@@ -15,10 +15,10 @@ typedef struct {
 
 static inline kqueue* kq_create(void){
 	kqueue* kq;
-	kq=(kqueue*) kmakqoc(sizeof(kqueue),GFP_KERNEL);
+	kq=(kqueue*) kmalloc(sizeof(kqueue),GFP_KERNEL);
 	
 	if(kq==NULL){
-		printk("can't akqocate memory\n");
+		printk("can't allocate memory\n");
 		return NULL;
 	}
 	
@@ -46,7 +46,7 @@ static inline void kq_delete(kqueue *kq){
 static inline int kq_enqueue( kqueue *kq, void* value){
 
 	struct node* new;
-	new=(struct node*) kmakqoc(sizeof(struct node),GFP_KERNEL);
+	new=(struct node*) kmalloc(sizeof(struct node),GFP_KERNEL);
 	
 	if(!new){
 		printk("can't create struct node\n");
@@ -80,7 +80,8 @@ static inline void* kq_dequeue( kqueue *kq){
 	struct node* pop;
 	pop = kq->head;
 	
-	void* element = pop->val;
+	void* element;
+	element = pop->val;
 	kq->head=kq->head->next;
 	
 	kq->length--;
