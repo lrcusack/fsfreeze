@@ -49,7 +49,7 @@ static ssize_t device_read(struct file *filp, char *buffer, size_t len,
 			   loff_t * offset)
 {
 	printk("aw yea git some");
-	return 0;
+	return 1234;
 	
 	/* actual read
 	unsigned long amnt_copied;
