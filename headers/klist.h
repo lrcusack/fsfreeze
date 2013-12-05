@@ -2,14 +2,14 @@
 #include<linux/gfp.h>
 
 
-typedef struct node{
+typedef struct struct node{
 	void* val;
 	struct node* next;
 } node;
 
 typedef struct {
-	node* head;
-	node* tail;
+	struct node* head;
+	struct node* tail;
 	int length;
 } llqueue;
 
@@ -26,7 +26,7 @@ static inline llqueue* ll_create(void){
 }
 
 static inline void ll_delete(llqueue *ll){
-	node* curr = ll->head;
+	struct node* curr = ll->head;
 	while(curr!=NULL){
 		ll->head=ll->head->next;
 		kfree(curr);
@@ -45,11 +45,11 @@ static inline void ll_delete(llqueue *ll){
 
 static inline int ll_enqueue( llqueue *ll, void* value){
 
-	node* new;
-	new=(node*) kmalloc(sizeof(node),GFP_KERNEL);
+	struct node* new;
+	new=(struct node*) kmalloc(sizeof(struct node),GFP_KERNEL);
 	
 	if(!new){
-		printk("can't create node\n");
+		printk("can't create struct node\n");
 		return 0;
 	}
 	
@@ -77,7 +77,7 @@ static inline void* ll_dequeue( llqueue *ll){
 	
 	if(0==ll->length) return NULL;
 	
-	node* pop;
+	struct node* pop;
 	pop = ll->head;
 	
 	void* element = pop->val;
