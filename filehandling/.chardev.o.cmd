@@ -349,6 +349,7 @@ deps_/root/fsfreeze/filehandling/chardev.o := \
   include/asm/uaccess.h \
     $(wildcard include/config/x86/intel/usercopy.h) \
     $(wildcard include/config/x86/wp/works/ok.h) \
+  /root/fsfreeze/filehandling/../headers/klist.h \
 
 /root/fsfreeze/filehandling/chardev.o: $(deps_/root/fsfreeze/filehandling/chardev.o)
 

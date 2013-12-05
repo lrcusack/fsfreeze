@@ -77,7 +77,8 @@ static inline void* ll_dequeue( llqueue *ll){
 	
 	if(0==ll->length) return NULL;
 	
-	node* pop =ll->head;
+	node* pop;
+	pop = ll->head;
 	
 	void* element = pop->val;
 	ll->head=ll->head->next;
