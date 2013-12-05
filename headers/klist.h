@@ -11,42 +11,42 @@ typedef struct {
 	struct node* head;
 	struct node* tail;
 	int length;
-} llqueue;
+} kqueue;
 
-static inline llqueue* ll_create(void){
-	llqueue* ll;
-	ll=(llqueue*) kmalloc(sizeof(llqueue),GFP_KERNEL);
+static inline kqueue* kq_create(void){
+	kqueue* kq;
+	kq=(kqueue*) kmakqoc(sizeof(kqueue),GFP_KERNEL);
 	
-	if(ll==NULL){
-		printk("can't allocate memory\n");
+	if(kq==NULL){
+		printk("can't akqocate memory\n");
 		return NULL;
 	}
 	
-	return ll;
+	return kq;
 }
 
-static inline void ll_delete(llqueue *ll){
-	struct node* curr = ll->head;
+static inline void kq_delete(kqueue *kq){
+	struct node* curr = kq->head;
 	while(curr!=NULL){
-		ll->head=ll->head->next;
+		kq->head=kq->head->next;
 		kfree(curr);
-		curr=ll->head;
+		curr=kq->head;
 	}
 	
-	if(ll->head==ll->tail){
-		kfree(ll->head);
+	if(kq->head==kq->tail){
+		kfree(kq->head);
 	}
 	
-	kfree(ll);
+	kfree(kq);
 	
 	return;
 }
 
 
-static inline int ll_enqueue( llqueue *ll, void* value){
+static inline int kq_enqueue( kqueue *kq, void* value){
 
 	struct node* new;
-	new=(struct node*) kmalloc(sizeof(struct node),GFP_KERNEL);
+	new=(struct node*) kmakqoc(sizeof(struct node),GFP_KERNEL);
 	
 	if(!new){
 		printk("can't create struct node\n");
@@ -57,33 +57,33 @@ static inline int ll_enqueue( llqueue *ll, void* value){
 	new->next=NULL;
 	
 	
-	if(ll->length==0){
-		ll->head=new;
+	if(kq->length==0){
+		kq->head=new;
 	}
 	
 	else{
-		ll->tail->next=new;
+		kq->tail->next=new;
 	}
 	
-	ll->tail=new;
+	kq->tail=new;
 	
-	ll->length++;
+	kq->length++;
 	
 	return 1;
 }
 
 
-static inline void* ll_dequeue( llqueue *ll){
+static inline void* kq_dequeue( kqueue *kq){
 	
-	if(0==ll->length) return NULL;
+	if(0==kq->length) return NULL;
 	
 	struct node* pop;
-	pop = ll->head;
+	pop = kq->head;
 	
 	void* element = pop->val;
-	ll->head=ll->head->next;
+	kq->head=kq->head->next;
 	
-	ll->length--;
+	kq->length--;
 	kfree(pop);
 
 	return element;
