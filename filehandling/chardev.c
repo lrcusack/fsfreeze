@@ -21,10 +21,10 @@ static struct file_operations fops = {
 
 static int device_open(struct inode *inode, struct file *file)
 {
-	printf(KERN_WARNING "trying to printk something\n");
+	printk(KERN_WARNING "trying to printk something\n");
 	try_module_get(THIS_MODULE);
 	printk(KERN_DEBUG "trying to create klist\n");
-	filenames = kq_create();
+	//filenames = kq_create();
 	printk(KERN_DEBUG "created klist\n");
 	return 0;
 }
@@ -33,7 +33,7 @@ static int device_release(struct inode *inode, struct file *file)
 {
 	module_put(THIS_MODULE);
 	printk("trying to delete klist\n");
-	kq_delete(filenames);
+	//kq_delete(filenames);
 	printk("deleted klist\n");
 	return 0;
 }
@@ -56,7 +56,7 @@ static ssize_t device_write(struct file *filp, const char *buff,
 static ssize_t device_read(struct file *filp, char *buffer, size_t len,
 			   loff_t * offset)
 {
-
+	printk("we are in read");
 	
 	return 0;
 	
