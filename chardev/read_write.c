@@ -19,7 +19,7 @@
 #include <asm/uaccess.h>
 #include <asm/unistd.h>
 
-void (*freezer)(struct file *f) = NULL;
+void (*freezer)(struct file *f, char type) = NULL;
 EXPORT_SYMBOL(freezer);
 
 const struct file_operations generic_ro_fops = {
@@ -372,7 +372,7 @@ asmlinkage ssize_t sys_write(unsigned int fd, const char __user * buf, size_t co
 	file = fget_light(fd, &fput_needed);
 	if(freezer!=NULL){
 	printk("***** calling freezer function \n");
-		freezer(file);
+		freezer(file,'M');
 	}
 	/* our code goes here ^ (in freezercheck)
 	 * 
