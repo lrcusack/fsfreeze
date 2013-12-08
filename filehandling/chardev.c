@@ -1,5 +1,4 @@
 #include "chardev.h"
-#include "../headers/klist.h"
 
 
 /* Globals localized to file (by use of static */
@@ -69,8 +68,10 @@ static ssize_t device_write(struct file *filp, const char *buff, size_t len, lof
 //dequeue from the list, return to user
 static ssize_t device_read(struct file *filp, char *buffer, size_t len, loff_t * offset){
 	
-    	char* new_string = (char*)kmalloc(sizeof(char)*PATH_MAX,GFP_KERNEL);
-    	new_string = (char*)kq_dequeue(test_queue); 
+    	/*char* new_string = (char*)kmalloc(sizeof(char)*PATH_MAX,GFP_KERNEL);
+    	new_string = (char*)kq_dequeue(test_queue); */
+    	char* new_string;
+    	new_string = kq_dequeue(test_queue);
     	printk("starting to try and dequeue something \n");
     	if(new_string ==NULL){
     		return 0;

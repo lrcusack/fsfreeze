@@ -3,6 +3,8 @@
 #include <linux/file.h>
 #include <linux/fs.h>
 #include <asm/uaccess.h>
+#include "../headers/klist.h"
+#include <linux/string.h>
 
 /* Function Prototypes */
 /* TODO: Add comments for each prototype */
