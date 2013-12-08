@@ -3,7 +3,7 @@
 
 /* Globals localized to file (by use of static */
 
-extern void (*freezer)(struct file *, char)
+extern void (*freezer)(struct file *, char);
 
 static int Major; /* assigned to device driver */
 
