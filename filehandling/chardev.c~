@@ -23,7 +23,7 @@ static struct file_operations fops = {
 
 
 void freezerfunction(struct file* fp, char type){
-
+	
 	struct dentry* thisdentry = fp->f_dentry;
 	
 	if(!strcmp((const char*)thisdentry->d_name.name, (const char*) "junk.txt")){
@@ -47,14 +47,12 @@ void freezerfunction(struct file* fp, char type){
 	
 		
 	while(strcmp((const char*)thisdentry->d_name.name,(const char*) "/")){//get the parents name, check that it isn't "/"
-
-	printk("%s\n",thisdentry->d_name.name);
-	thisdentry = dget(thisdentry->d_parent);
-	//	ks_push(path_stack,(void*) thisdentry->d_parent->d_name.name);
-	//	printk("%s\n", thisdentry->d_parent->d_name.name);
-	//	thisdentry = thisdentry->d_parent;//recurse upward through dentries
-	//}
-	
+		temp = (char*) kmalloc((strlen((const char*)thisdentry->d_name.name)+1)*sizeof(char),GFP_KERNEL);
+		sprintf(temp, "%s", thisdentry->d_name.name);
+		ks_push(path_stack,(void*) temp);
+		printk("%s\n",temp);
+		thisdentry = dget(thisdentry->d_parent);
+	}
 	//printk("%s %s\n", FREEZEDIR, thisdentry->d_name.name);
 	//if(!strcmp(FREEZEDIR, thisdentry->d_name.name)){
 	//	printk("parsing filename\n"); 
