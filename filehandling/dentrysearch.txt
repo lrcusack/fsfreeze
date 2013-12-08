@@ -1,0 +1,5 @@
+in sys_write (read_write.c)
+
+file->f_dentry->inode
+
+char* file->f_dentry->dname.name

@@ -1,91 +1,98 @@
-#include <linux/kernel.h>
-#include <linux/slab.h>
+#include<linux/slab.h>
+#include<linux/gfp.h>
+
 
 typedef struct node{
-
-	char* val;
+	void* val;
 	struct node* next;
 } node;
 
-typedef struct llqueue{
+typedef struct {
 	struct node* head;
 	struct node* tail;
 	int length;
-} llqueue;
+} kqueue;
 
-static inline llqueue* ll_create(void){
-	llqueue* ll;
-	ll=(struct llqueue*) kmalloc(sizeof(struct llqueue));
+static inline kqueue* kq_create(void){
+	kqueue* kq;
+	kq=(kqueue*) kmalloc(sizeof(kqueue),GFP_KERNEL);
 	
-	if(!ll){
+	if(kq==NULL){
 		printk("can't allocate memory\n");
-		return 0;
+		return NULL;
 	}
-	
-	return 0;
+	kq->length = 0;
+	return kq;
 }
 
-static inline void ll_delete(llqueue *ll){
-	node* curr = ll->head;
-	int ii;
-	for(ii=0; ii < (ll->length); ii++){
-
-		ll->head=ll->head->next;
-		kfree(curr->val);
+static inline void kq_delete(kqueue *kq){
+	struct node* curr = kq->head;
+	while(curr!=NULL){
+		kq->head=kq->head->next;
 		kfree(curr);
-		curr=ll->head;
+		curr=kq->head;
 	}
 	
-	if(ll->head==ll->tail){
-		kfree(ll->head->val);
-		kfree(ll->head);
+	if(kq->head==kq->tail){
+		kfree(kq->head);
 	}
 	
-	kfree(ll);
+	kfree(kq);
 	
 	return;
 }
 
-static inline int ll_enqueue( llqueue *ll, char* string){
+static inline void print_thing(kqueue *kq){
+	struct node* curr = kq->head;
+	while(curr!= NULL){
+		printk("%c \n",*(char*)curr->val);
+		curr = curr->next;
+	}
 
-	node* new;
-	new=(node*) kmalloc(sizeof(node));
+}
+
+static inline int kq_enqueue( kqueue *kq, void* value){
+
+	struct node* new;
+	new=(node*) kmalloc(sizeof(node),GFP_KERNEL);
+	
 	
 	if(!new){
-		printk("can't create node\n");
+		printk("can't create struct node\n");
 		return 0;
 	}
 	
-	new->val=string;
-	
-	if(ll->length==0){
-		new->next=0;
-		ll->head=new;
-		ll->tail=new;
-		ll->head->next=0;
-		ll->tail->next=0;
+	new->val=value;
+	new->next=NULL;		
+	if(kq->length==0){
+		kq->head=new;
 	}
 	
 	else{
-		ll->tail->next=new;
-		ll->tail=new;
-		ll->tail->next=0;
+		kq->tail->next=new;
+		
 	}
+	
+	kq->tail=new;
+	kq->length++;
 	
 	return 1;
 }
 
-static inline int ll_dequeue( llqueue *ll, char* element){
+
+static inline void* kq_dequeue( kqueue *kq){
+	void* element;
+	struct node* pop;
+	if(0==kq->length) return NULL;
 	
-	if(0==ll->length) return 0;
+	pop = kq->head;
+	element = pop->val;
+	kq->head=kq->head->next;
 	
-	node* pop =ll->head;
-	
-	element = ll->head->val;
-	ll->head=ll->head->next;
-	
-	ll->length--;
+	kq->length--;
 	kfree(pop);
 
-	return 1;
+	return element;
+
+	//for edge case were list is empty, return 0
 }
