@@ -2,14 +2,14 @@
 #include<linux/gfp.h>
 
 
-typedef struct node{
+typedef struct snode{
 	void* val;
-	struct node* next;
-} node;
+	struct snode* next;
+} snode;
 
 typedef struct {
-	struct node* head;
-	struct node* tail;
+	struct snode* head;
+	struct snode* tail;
 	int length;
 } kstack;
 
@@ -26,7 +26,7 @@ static inline kstack* ks_create(void){
 }
 
 static inline void ks_delete(kstack *ks){
-	struct node* curr = ks->head;
+	struct snode* curr = ks->head;
 	while(curr!=NULL){
 		ks->head=ks->head->next;
 		kfree(curr);
@@ -45,11 +45,11 @@ static inline void ks_delete(kstack *ks){
 //changed this to LIFO
 static inline int ks_push( kstack *ks, void* value){
 
-	struct node* new;
-	new=(struct node*) kmalloc(sizeof(struct node),GFP_KERNEL);
+	struct snode* new;
+	new=(struct snode*) kmalloc(sizeof(struct snode),GFP_KERNEL);
 	
 	if(!new){
-		printk("can't create struct node\n");
+		printk("can't create struct snode\n");
 		return 0;
 	}
 	
@@ -74,7 +74,7 @@ static inline int ks_push( kstack *ks, void* value){
 //already dequeues from the front of the list so is all good
 static inline void* ks_pop( kstack *ks){
 	void* element;
-	struct node* pop;
+	struct snode* pop;
 	if(0==ks->length) return NULL;
 	
 	pop = ks->head;

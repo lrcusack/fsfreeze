@@ -11,6 +11,6 @@
 #define LOG_FILE "logfile.txt"
 #define LOG_FORMAT " %c %s"
 #define DELIM '\n'
-#define BUFLEN PATH_MAX
+#define BUFLEN PATH_MAXCD 
 
 

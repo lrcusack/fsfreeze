@@ -2,10 +2,12 @@
 #include <linux/module.h>
 #include <linux/file.h>
 #include <linux/fs.h>
+#include <linux/dcache.h>
 #include <asm/uaccess.h>
 #include <linux/string.h>
 
 #include "../headers/klist.h"
+#include "../headers/kstack.h"
 #include "../headers/project.h"
 
 /* Function Prototypes */

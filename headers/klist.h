@@ -2,14 +2,14 @@
 #include<linux/gfp.h>
 
 
-typedef struct node{
+typedef struct qnode{
 	void* val;
-	struct node* next;
-} node;
+	struct qnode* next;
+} qnode;
 
 typedef struct {
-	struct node* head;
-	struct node* tail;
+	struct qnode* head;
+	struct qnode* tail;
 	int length;
 } kqueue;
 
@@ -26,7 +26,7 @@ static inline kqueue* kq_create(void){
 }
 
 static inline void kq_delete(kqueue *kq){
-	struct node* curr = kq->head;
+	struct qnode* curr = kq->head;
 	while(curr!=NULL){
 		kq->head=kq->head->next;
 		kfree(curr);
@@ -43,7 +43,7 @@ static inline void kq_delete(kqueue *kq){
 }
 
 static inline void print_thing(kqueue *kq){
-	struct node* curr = kq->head;
+	struct qnode* curr = kq->head;
 	while(curr!= NULL){
 		printk("%c \n",*(char*)curr->val);
 		curr = curr->next;
@@ -53,12 +53,12 @@ static inline void print_thing(kqueue *kq){
 
 static inline int kq_enqueue( kqueue *kq, void* value){
 
-	struct node* new;
-	new=(node*) kmalloc(sizeof(node),GFP_KERNEL);
+	struct qnode* new;
+	new=(qnode*) kmalloc(sizeof(qnode),GFP_KERNEL);
 	
 	
 	if(!new){
-		printk("can't create struct node\n");
+		printk("can't create struct qnode\n");
 		return 0;
 	}
 	
@@ -82,7 +82,7 @@ static inline int kq_enqueue( kqueue *kq, void* value){
 
 static inline void* kq_dequeue( kqueue *kq){
 	void* element;
-	struct node* pop;
+	struct qnode* pop;
 	if(0==kq->length) return NULL;
 	
 	pop = kq->head;

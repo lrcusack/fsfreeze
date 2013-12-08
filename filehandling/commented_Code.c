@@ -6,7 +6,10 @@
 	//printk("filp->f_dentry->d_name.name %s\n", filp->f_dentry->d_name.name);
 	//printk("filp->f_dentry->d_parent->d_name.name %s\n", filp->f_dentry->d_parent->d_name.name);
 	//printk("filp->f_dentry->d_parent->d_parent->d_name.name %s\n", filp->f_dentry->d_parent->d_parent->d_name.name);
+#include "/root/fsfreeze/headers/project.h"
+#include "/root/fsfreeze/headers/kstack.h"
 	
+//in sys_write	
 	if(freezerfct != NULL){
 		//code for determining if it is in the path
 		

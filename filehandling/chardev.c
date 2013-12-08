@@ -20,11 +20,39 @@ static struct file_operations fops = {
 };
 
 
-void freezerfunction(char type, char* fname){
-	char* logstring = kmalloc(sizeof(char)*(strlen(fname)+4), GFP_KERNEL);
-	sprintf(logstring, LOG_FORMAT, type, fname);
-	kq_enqueue(fname_queue,logstring);
-	//enqueue waitqueue here
+void freezerfunction(struct file* fp, char type){
+	struct dentry* thisdentry = fp->f_dentry;
+	char fname[PATH_MAX];
+	char* temp;
+	char* logstring;
+	
+	kstack* path_stack = ks_create();
+	ks_push(path_stack, (void*) thisdentry->d_name.name);
+	printk("%s\n",thisdentry->d_name.name);
+	
+	while(strcmp(thisdentry->d_parent->d_name.name,"/")){
+		ks_push(path_stack,(void*) thisdentry->d_parent->d_name.name);
+		printk("%s\n", thisdentry->d_parent->d_name.name);
+		thisdentry = thisdentry->d_parent;
+	}
+	
+	printk("%s %s\n", FREEZEDIR, thisdentry->d_name.name);
+	if(!strcmp(FREEZEDIR, thisdentry->d_name.name)){
+		printk("parsing filename\n"); 
+		
+		while ((temp = ks_pop(path_stack))!=NULL){
+			strcat(fname,temp);
+			printk("%s\n", fname);
+			kfree(temp);
+		}
+		ks_delete(path_stack);
+		
+		logstring = kmalloc(sizeof(char)*(strlen(fname)+4), GFP_KERNEL);
+		sprintf(logstring, LOG_FORMAT, type, fname);
+		kq_enqueue(fname_queue,logstring);
+		//enqueue waitqueue here
+	}
+	
 	return;
 }
 
