@@ -3,8 +3,8 @@
 #include <linux/file.h>
 #include <linux/fs.h>
 #include <asm/uaccess.h>
-//#include "../headers/klist.h"
-#include "../headers/kstack.h"
+#include "../headers/klist.h"
+//#include "../headers/kstack.h"
 #include <linux/string.h>
 
 /* Function Prototypes */

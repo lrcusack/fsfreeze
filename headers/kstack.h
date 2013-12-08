@@ -42,8 +42,8 @@ static inline void ks_delete(kstack *ks){
 	return;
 }
 
-//changed this to FIFO
-static inline int ks_enqueue( kstack *ks, void* value){
+//changed this to LIFO
+static inline int ks_push( kstack *ks, void* value){
 
 	struct node* new;
 	new=(struct node*) kmalloc(sizeof(struct node),GFP_KERNEL);
@@ -72,7 +72,7 @@ static inline int ks_enqueue( kstack *ks, void* value){
 }
 
 //already dequeues from the front of the list so is all good
-static inline void* ks_dequeue( kstack *ks){
+static inline void* ks_pop( kstack *ks){
 	void* element;
 	struct node* pop;
 	if(0==ks->length) return NULL;
