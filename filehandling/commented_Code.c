@@ -14,18 +14,24 @@
 		char fname[PATH_MAX];
 		char* dirname;
 		char type = 'M';
-		[kernel stack type name]* path_stack = [kernel stack create]();
+		kstack* path_stack = ks_create();
+		ks_push(path_stack, current->d_name.name);
+		printk("%s\n",current->d_name.name);
 		while(strcmp(current->d_parent->d_name.name,"/")){
-			[kernel stack push](path_stack, current->d_parent->d_name.name);
+			ks_push(path_stack, current->d_parent->d_name.name);
+			printk("%s\n", current->d_parent->d_name.name);
 			current = current->d_parent;
 		}
+		printk("%s %s\n", FREEZEDIR, current->d_name.name);
 		if(!strcmp(FREEZEDIR, current->d_name.name)){
-			while ((temp = [kernel stack pop](path_stack))!=NULL){
+			printk("parsing filename\n"); 
+			while ((temp = ks_pop(path_stack))!=NULL){
 				strcat(fname,temp);
+				printk("%s\n", fname);
 				kfree(temp);
 			}
-			[kernel stack delete](path_stack);
-			freezerfct(type, fname);
+			ks_delete(path_stack);
+			//freezerfct(type, fname);
 		}
 	}
 */
