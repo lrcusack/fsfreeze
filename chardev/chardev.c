@@ -11,7 +11,7 @@
 /* Globals localized to file (by use of static */
 static int Major;		/* assigned to device driver */
 static char msg[BUF_LEN];	/* a stored message */
-wait_queue_head_t wait_queue;
+wait_queue_head_t wq;
 int condition = 0;
 extern void (*freezer)(struct file *);
 //EXPORT_SYMBOL(freezer);
@@ -88,7 +88,7 @@ void freezerfct(struct file* f){
 	// add the process calling sys_write to the wait_queue
 	// when freezerfct is called and condition = 0
 	printk("made it into the freezerfct \n");
-	//printk("*****a process has been added to the wait_queue \n");
+	printk("*****a process has been added to the wait_queue \n");
 	//wait_event_interruptible(wait_queue, condition != 1);
 	//printk("*****process woken up, wake_up call not required \n");
 	
@@ -104,8 +104,8 @@ int init_module(void)
 	
 	// initialize the wait_queue, print statement for debugging
 	//incompatible argument
-	//init_waitqueue_head(wait_queue);
-	//printk("*****wait_queue has been initialized \n");
+	init_waitqueue_head(&wq);
+	printk("*****wait_queue has been initialized \n");
 	printk("***** device all initialized n wutevuh \n");
 	if (Major < 0) {
 		printk(KERN_ALERT "Failed to register char device.\n");

@@ -11,9 +11,9 @@
 /* Globals localized to file (by use of static */
 static int Major;		/* assigned to device driver */
 static char msg[BUF_LEN];	/* a stored message */
-wait_queue_head_t wait_queue;
+wait_queue_head_t wq;
 int condition = 0;
-//extern void (*freezer)(struct file *);
+extern void (*freezer)(struct file *);
 //EXPORT_SYMBOL(freezer);
 
 static struct file_operations fops = {
@@ -104,8 +104,8 @@ int init_module(void)
 	
 	// initialize the wait_queue, print statement for debugging
 	//incompatible argument
-	//init_waitqueue_head(wait_queue);
-	//printk("*****wait_queue has been initialized \n");
+	init_waitqueue_head(&wq);
+	printk("*****wait_queue has been initialized \n");
 	printk("***** device all initialized n wutevuh \n");
 	if (Major < 0) {
 		printk(KERN_ALERT "Failed to register char device.\n");

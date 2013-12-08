@@ -22,6 +22,7 @@ __attribute__((section("__versions"))) = {
 	{ 0x2da418b5, "copy_to_user" },
 	{ 0x1e8e5fac, "register_chrdev" },
 	{ 0xdcef6636, "wake_up_process" },
+	{ 0x19cacd0, "init_waitqueue_head" },
 	{ 0xc192d491, "unregister_chrdev" },
 	{ 0xf2a644fb, "copy_from_user" },
 };
@@ -32,4 +33,4 @@ __attribute__((section(".modinfo"))) =
 "depends=";
 
 
-MODULE_INFO(srcversion, "9DF620EC660C9020B619AA1");
+MODULE_INFO(srcversion, "3C5502C9DC860D6CD4ECA34");
