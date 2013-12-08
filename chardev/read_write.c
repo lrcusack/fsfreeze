@@ -19,8 +19,8 @@
 #include <asm/uaccess.h>
 #include <asm/unistd.h>
 
-void (*freezercheck)(struct file *);
-EXPORT_SYMBOL(freezercheck)
+void (*freezer)(struct file *f) = NULL;
+EXPORT_SYMBOL(freezer);
 
 const struct file_operations generic_ro_fops = {
 	.llseek		= generic_file_llseek,
@@ -32,7 +32,8 @@ const struct file_operations generic_ro_fops = {
 EXPORT_SYMBOL(generic_ro_fops);
 
 loff_t generic_file_llseek(struct file *file, loff_t offset, int origin)
-{
+{	
+
 	long long retval;
 	struct inode *inode = file->f_mapping->host;
 
@@ -250,7 +251,6 @@ EXPORT_SYMBOL(do_sync_read);
 ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
 {
 	ssize_t ret;
-
 	if (!(file->f_mode & FMODE_READ))
 		return -EBADF;
 	if (!file->f_op || (!file->f_op->read && !file->f_op->aio_read))
@@ -344,6 +344,7 @@ static inline void file_pos_write(struct file *file, loff_t pos)
 
 asmlinkage ssize_t sys_read(unsigned int fd, char __user * buf, size_t count)
 {
+	
 	struct file *file;
 	ssize_t ret = -EBADF;
 	int fput_needed;
@@ -362,13 +363,16 @@ EXPORT_SYMBOL_GPL(sys_read);
 
 asmlinkage ssize_t sys_write(unsigned int fd, const char __user * buf, size_t count)
 {
+
 	struct file *file;
 	ssize_t ret = -EBADF;
 	int fput_needed;
-
+	//printk("***** currently in sys_write \n");
+	
 	file = fget_light(fd, &fput_needed);
-	if(freezerfct!=NULL){
-		freezerfct(file);
+	if(freezer!=NULL){
+	printk("***** calling freezer function \n");
+		freezer(file);
 	}
 	/* our code goes here ^ (in freezercheck)
 	 * 
@@ -401,7 +405,7 @@ asmlinkage ssize_t sys_pread64(unsigned int fd, char __user *buf,
 	struct file *file;
 	ssize_t ret = -EBADF;
 	int fput_needed;
-
+	
 	if (pos < 0)
 		return -EINVAL;
 
@@ -592,6 +596,7 @@ Efault:
 ssize_t vfs_readv(struct file *file, const struct iovec __user *vec,
 		  unsigned long vlen, loff_t *pos)
 {
+
 	if (!(file->f_mode & FMODE_READ))
 		return -EBADF;
 	if (!file->f_op || (!file->f_op->readv && !file->f_op->read))
@@ -605,6 +610,7 @@ EXPORT_SYMBOL(vfs_readv);
 ssize_t vfs_writev(struct file *file, const struct iovec __user *vec,
 		   unsigned long vlen, loff_t *pos)
 {
+
 	if (!(file->f_mode & FMODE_WRITE))
 		return -EBADF;
 	if (!file->f_op || (!file->f_op->writev && !file->f_op->write))
@@ -618,6 +624,7 @@ EXPORT_SYMBOL(vfs_writev);
 asmlinkage ssize_t
 sys_readv(unsigned long fd, const struct iovec __user *vec, unsigned long vlen)
 {
+
 	struct file *file;
 	ssize_t ret = -EBADF;
 	int fput_needed;
@@ -642,7 +649,7 @@ sys_writev(unsigned long fd, const struct iovec __user *vec, unsigned long vlen)
 	struct file *file;
 	ssize_t ret = -EBADF;
 	int fput_needed;
-
+	
 	file = fget_light(fd, &fput_needed);
 	if (file) {
 		loff_t pos = file_pos_read(file);
