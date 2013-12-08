@@ -24,27 +24,26 @@ static struct file_operations fops = {
 
 void freezerfunction(struct file* fp, char type){
 
-//dentry is the struct he told us to look at, this gets this file's dentry
-	struct dentry* thisdentry = fp->f_dentry;
-//this should get the filename of the file, without the path. e.g. if the file was located at /home/documents/sample.txt, thisentry->d_name.name would be sample.txt
+
 	if(!strcmp((const char*)thisdentry->d_name.name, (const char*) "junk.txt")){
-		return;//here i'm trying to make sure it only does it for "junk.txt"
+		return;
 	}
 	char fname[PATH_MAX];
 	char* temp;
 	char* logstring;
 	kstack* path_stack;
+	struct dentry* thisdentry = fp->f_dentry;
 	printk("got to freezerfunction\n");
 	
 	path_stack = ks_create();
-	ks_push(path_stack, (void*) thisdentry->d_name.name);//put the file name in the path stack
+	ks_push(path_stack, (void*) thisdentry->d_name.name);
 	printk("%s\n",thisdentry->d_name.name);
 	printk("%s\n", thisdentry->d_parent->d_name.name);
 		
-	while(strcmp((const char*)thisdentry->d_parent->d_name.name,(const char*) "/")){//get the parents name, check that it isn't "/"
+	while(strcmp((const char*)thisdentry->d_parent->d_name.name,(const char*) "/")){
 	//	ks_push(path_stack,(void*) thisdentry->d_parent->d_name.name);
 	//	printk("%s\n", thisdentry->d_parent->d_name.name);
-	//	thisdentry = thisdentry->d_parent;//recurse upward through dentries
+	//	thisdentry = thisdentry->d_parent;
 	}
 	
 	//printk("%s %s\n", FREEZEDIR, thisdentry->d_name.name);
