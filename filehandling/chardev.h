@@ -6,6 +6,7 @@
 #include <linux/string.h>
 
 #include "../headers/klist.h"
+#include "../headers/project.h"
 
 /* Function Prototypes */
 /* TODO: Add comments for each prototype */

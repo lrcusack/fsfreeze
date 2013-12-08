@@ -18,9 +18,9 @@ int main(){
 	char read_buff[PATH_MAX];
 	
 
-	char* b1 = " whats ";
-	char* b2 = " up ";
-	char* b3 = " bitch ";
+	char* b1 = "whats.txt";
+	char* b2 = "up.dat";
+	char* b3 = "bitch.jpg";
 	ssize_t count1 = strlen(b1)*sizeof(char);
 	ssize_t count2 = strlen(b2)*sizeof(char);
 	ssize_t count3 = strlen(b3)*sizeof(char);
@@ -41,7 +41,8 @@ int main(){
 	read_var3 = read(file_d,read_buff,PATH_MAX);
 	printf("%s \n",read_buff);
 	printf("finished my read \n");
+	*/
 	
 
-
+	return 0;
 }
