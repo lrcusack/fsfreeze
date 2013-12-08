@@ -17,12 +17,13 @@ static const struct modversion_info ____versions[]
 __attribute_used__
 __attribute__((section("__versions"))) = {
 	{ 0xb499ef18, "struct_module" },
-	{ 0x2da418b5, "copy_to_user" },
-	{ 0xf2a644fb, "copy_from_user" },
-	{ 0xdcef6636, "wake_up_process" },
-	{ 0x1e8e5fac, "register_chrdev" },
+	{ 0x38a4ddaa, "freezer" },
 	{ 0x1b7d4074, "printk" },
+	{ 0x2da418b5, "copy_to_user" },
+	{ 0x1e8e5fac, "register_chrdev" },
+	{ 0xdcef6636, "wake_up_process" },
 	{ 0xc192d491, "unregister_chrdev" },
+	{ 0xf2a644fb, "copy_from_user" },
 };
 
 static const char __module_depends[]
@@ -31,4 +32,4 @@ __attribute__((section(".modinfo"))) =
 "depends=";
 
 
-MODULE_INFO(srcversion, "1474676CCADA5D546D8CEEE");
+MODULE_INFO(srcversion, "9DF620EC660C9020B619AA1");
