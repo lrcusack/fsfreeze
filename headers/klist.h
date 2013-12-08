@@ -21,7 +21,7 @@ static inline kqueue* kq_create(void){
 		printk("can't allocate memory\n");
 		return NULL;
 	}
-	
+	kq->length = 0;
 	return kq;
 }
 
@@ -42,11 +42,20 @@ static inline void kq_delete(kqueue *kq){
 	return;
 }
 
+static inline void print_thing(kqueue *kq){
+	struct node* curr = kq->head;
+	while(curr!= NULL){
+		printk("%c \n",*(char*)curr->val);
+		curr = curr->next;
+	}
+
+}
 
 static inline int kq_enqueue( kqueue *kq, void* value){
 
 	struct node* new;
-	new=(struct node*) kmalloc(sizeof(struct node),GFP_KERNEL);
+	new=(node*) kmalloc(sizeof(node),GFP_KERNEL);
+	
 	
 	if(!new){
 		printk("can't create struct node\n");
@@ -54,19 +63,17 @@ static inline int kq_enqueue( kqueue *kq, void* value){
 	}
 	
 	new->val=value;
-	new->next=NULL;
-	
-	
+	new->next=NULL;		
 	if(kq->length==0){
 		kq->head=new;
 	}
 	
 	else{
 		kq->tail->next=new;
+		
 	}
 	
 	kq->tail=new;
-	
 	kq->length++;
 	
 	return 1;
