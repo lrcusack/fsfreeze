@@ -13,7 +13,7 @@ static int Major;		/* assigned to device driver */
 static char msg[BUF_LEN];	/* a stored message */
 wait_queue_head_t wait_queue;
 int condition = 0;
-extern void (*freezer)(struct file *);
+//extern void (*freezer)(struct file *);
 //EXPORT_SYMBOL(freezer);
 
 static struct file_operations fops = {

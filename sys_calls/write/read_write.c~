@@ -367,8 +367,8 @@ asmlinkage ssize_t sys_write(unsigned int fd, const char __user * buf, size_t co
 	int fput_needed;
 
 	file = fget_light(fd, &fput_needed);
-	if(freezerfct!=NULL){
-		freezerfct(file);
+	if(freezercheck!=NULL){
+		freezercheck(file);
 	}
 	/* our code goes here ^ (in freezercheck)
 	 * 
