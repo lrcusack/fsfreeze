@@ -1,9 +1,4 @@
-	/*our read code
-	char* fname = kq_dequeue(filenames);
-	if(fname==NULL) return 0;
-	sprintf(buffer, "%s", fname);
-	return strlen(buffer);
-	*/
+
 	
 
 /* in read_write.c
