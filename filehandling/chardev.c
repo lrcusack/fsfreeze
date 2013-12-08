@@ -7,7 +7,8 @@ static int Major; /* assigned to device driver */
 
 static char msg[BUF_LEN]; /* a stored message */
 
-kqueue* test_queue;
+//kqueue* test_queue;
+kstack* test_stack;
 
 
 static struct file_operations fops = {
@@ -24,12 +25,23 @@ static struct file_operations fops = {
 
 
 static int device_open(struct inode *inode, struct file *file){
+//###USING A KQUEUE####
+/*
 	printk("in open\n");
 	test_queue = kq_create();
 	try_module_get(THIS_MODULE);
 	printk("did not seg fault in device_open \n");
 	printk("the test_queue pointer is %p \n",test_queue);
 	return 0;
+*/
+//###USING A KSTACK ####
+	printk("in open\n");
+	test_stack = ks_create();
+	try_module_get(THIS_MODULE);
+	printk("did not seg fault in device_open \n");
+	printk("the test_queue pointer is %p \n",test_stack);
+	return 0;
+	
 }
 
 
@@ -47,7 +59,8 @@ return 0;
 /* Called when a process writes to dev file: echo "hi" > /dev/hello */
 
 static ssize_t device_write(struct file *filp, const char *buff, size_t len, loff_t * off){
-    	
+//#### USING A KQUEUE ####
+/*    	
     	static int enqueue_check;
     	char * new_string;
     	printk("starting to try and enqueue something \n");
@@ -56,6 +69,17 @@ static ssize_t device_write(struct file *filp, const char *buff, size_t len, lof
     	enqueue_check = kq_enqueue(test_queue, new_string);
     	printk("got through enqueing something \n");
     	return strlen(new_string);
+*/
+//#### USING A KSTACK ####
+	static int enqueue_check;
+    	char * new_string;
+    	printk("starting to try and enstack something \n");
+    	new_string = (char*)kmalloc(sizeof(char)*strlen(buff),GFP_KERNEL);
+    	sprintf(new_string,"%s",buff);
+    	enqueue_check = ks_enqueue(test_stack, new_string);
+    	printk("got through enstack something \n");
+    	return strlen(new_string);
+    	
 	/*int copy_len = len > BUF_LEN ? BUF_LEN : len;
 	unsigned long amnt_copied = 0;
 	// NOTE: copy_from_user returns the amount of bytes _not_ copied 
@@ -68,8 +92,8 @@ static ssize_t device_write(struct file *filp, const char *buff, size_t len, lof
 //dequeue from the list, return to user
 static ssize_t device_read(struct file *filp, char *buffer, size_t len, loff_t * offset){
 	
-    	/*char* new_string = (char*)kmalloc(sizeof(char)*PATH_MAX,GFP_KERNEL);
-    	new_string = (char*)kq_dequeue(test_queue); */
+//#### USING A KQUEUE ####
+/*
     	char* new_string;
     	new_string = kq_dequeue(test_queue);
     	printk("starting to try and dequeue something \n");
@@ -79,6 +103,19 @@ static ssize_t device_read(struct file *filp, char *buffer, size_t len, loff_t *
     	sprintf(buffer,"%s",new_string);
     	kfree(new_string);
     	printk("got through dequeing something \n");
+    	return 1;
+*/
+
+//#### USING A KSTACK ####
+	char* new_string;
+    	new_string = ks_dequeue(test_stack);
+    	printk("starting to try and destack something \n");
+    	if(new_string ==NULL){
+    		return 0;
+    	}  	
+    	sprintf(buffer,"%s",new_string);
+    	kfree(new_string);
+    	printk("got through destack something \n");
     	return 1;
     	
 	/*

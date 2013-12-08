@@ -11,21 +11,21 @@ typedef struct {
 	struct node* head;
 	struct node* tail;
 	int length;
-} k_stack;
+} kstack;
 
-static inline k_stack* ks_create(void){
-	k_stack* ks;
-	ks=(kstack*) kmalloc(sizeof(k_stack),GFP_KERNEL);
+static inline kstack* ks_create(void){
+	kstack* ks;
+	ks=(kstack*) kmalloc(sizeof(kstack),GFP_KERNEL);
 	
 	if(ks==NULL){
 		printk("can't allocate memory\n");
 		return NULL;
 	}
-	
-	return kq;
+	ks->length = 0;
+	return ks;
 }
 
-static inline void ks_delete(k_stack *ks){
+static inline void ks_delete(kstack *ks){
 	struct node* curr = ks->head;
 	while(curr!=NULL){
 		ks->head=ks->head->next;
@@ -37,13 +37,13 @@ static inline void ks_delete(k_stack *ks){
 		kfree(ks->head);
 	}
 	
-	kfree(kq);
+	kfree(ks);
 	
 	return;
 }
 
 //changed this to FIFO
-static inline int ks_enqueue( kqueue *ks, void* value){
+static inline int ks_enqueue( kstack *ks, void* value){
 
 	struct node* new;
 	new=(struct node*) kmalloc(sizeof(struct node),GFP_KERNEL);
@@ -62,7 +62,7 @@ static inline int ks_enqueue( kqueue *ks, void* value){
 	}
 	
 	else{
-		ks->next = ks->head;
+		new->next = ks->head;
 		ks->head=new;
 	}
 	
@@ -72,7 +72,7 @@ static inline int ks_enqueue( kqueue *ks, void* value){
 }
 
 //already dequeues from the front of the list so is all good
-static inline void* ks_dequeue( kqueue *ks){
+static inline void* ks_dequeue( kstack *ks){
 	void* element;
 	struct node* pop;
 	if(0==ks->length) return NULL;
