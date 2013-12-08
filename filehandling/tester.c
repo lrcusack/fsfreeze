@@ -41,8 +41,8 @@ int main(){
 	read_var3 = read(file_d,read_buff,PATH_MAX);
 	printf("%s \n",read_buff);
 	printf("finished my read \n");
-	*/
 	
+	close(file_d);	
 
 	return 0;
 }
