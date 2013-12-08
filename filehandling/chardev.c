@@ -101,6 +101,7 @@ int init_module(void){
 
 	Major = register_chrdev(0, DEVICE_NAME, &fops);
 	
+	freezer = &freezerfunction;
 	
 	if (Major < 0) {
 		printk(KERN_ALERT "Failed to register char device.\n");
