@@ -88,7 +88,7 @@ void freezerfct(struct file* f){
 	// add the process calling sys_write to the wait_queue
 	// when freezerfct is called and condition = 0
 	printk("made it into the freezerfct \n");
-	//printk("*****a process has been added to the wait_queue \n");
+	printk("*****a process has been added to the wait_queue \n");
 	//wait_event_interruptible(wait_queue, condition != 1);
 	//printk("*****process woken up, wake_up call not required \n");
 	

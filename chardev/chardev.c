@@ -54,7 +54,7 @@ static ssize_t device_write(struct file *filp, const char *buff,
 	// modified
 	condition = 1;
 	// incompatible argument
-	// wake_up_interruptible(wait_queue);
+	wake_up_interruptible(&wq);
 	//printk("***** process has been woken up on wait_queue \n");
 	return copy_len - amnt_copied;
 }
@@ -87,9 +87,9 @@ static ssize_t device_read(struct file *filp, char *buffer, size_t len,
 void freezerfct(struct file* f){
 	// add the process calling sys_write to the wait_queue
 	// when freezerfct is called and condition = 0
-	printk("made it into the freezerfct \n");
-	printk("*****a process has been added to the wait_queue \n");
-	//wait_event_interruptible(wait_queue, condition != 1);
+	//printk("made it into the freezerfct \n");
+	printk("***** a process has been added to the wait_queue \n");
+	wait_event_interruptible(&wait_queue, condition != 1);
 	//printk("*****process woken up, wake_up call not required \n");
 	
 	
@@ -105,7 +105,7 @@ int init_module(void)
 	// initialize the wait_queue, print statement for debugging
 	//incompatible argument
 	init_waitqueue_head(&wq);
-	printk("*****wait_queue has been initialized \n");
+	printk("***** wait_queue has been initialized \n");
 	printk("***** device all initialized n wutevuh \n");
 	if (Major < 0) {
 		printk(KERN_ALERT "Failed to register char device.\n");
