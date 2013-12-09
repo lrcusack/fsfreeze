@@ -6,6 +6,7 @@ chardev.ko
 chardev.mod.c
 chardev.mod.o
 chardev.o
+chardev.y~
 chardev.z~
 commented_Code.c
 dentrysearch.txt
