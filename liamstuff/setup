@@ -1,0 +1,10 @@
+#!/bin/bash
+
+rmmod chardev
+rm /dev/filename_holder
+make clean
+make all
+insmod chardev.ko
+lsmod | grep chardev
+dmesg | grep chardev
+make device

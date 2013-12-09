@@ -24,19 +24,24 @@ static struct file_operations fops = {
 
 void freezerfunction(struct file* fp, char type){
 	char* temp = NULL;
-	char* logstring;
-	kstack* path_stack;
-	char* fname_buf;
-	struct dentry* thisdentry;
-	thisdentry = fp->f_dentry;
+	
+	kstack* path_stack= ks_create();
+
+	
+	struct dentry* thisdentry = fp->f_dentry;
 	
 	if(!strcmp((const char*) thisdentry->d_name.name, (const char*)"junk.txt")){
-		char* logstring;
-		kstack* path_stack;
-		char* fname_buf;
 		
-		fname_buf = (char*) kmalloc(sizeof(char)*PATH_MAX, GFP_KERNEL);
-		path_stack = ks_create();
+		while(strcmp((const char*)thisdentry->d_name.name,(const char*) "/")){//get the parents name, check that it isn't "/"
+			temp = (char*) kmalloc((strlen((const char*)thisdentry->d_name.name)+1)*sizeof(char),GFP_KERNEL);
+			sprintf(temp, "%s", thisdentry->d_name.name);
+			ks_push(path_stack,(void*) temp);
+			//printk("%s\n",temp);
+			thisdentry = dget(thisdentry->d_parent);
+		}
+		
+		char* fname_buf = (char*) kmalloc(sizeof(char)*PATH_MAX, GFP_KERNEL);
+
 		while(strcmp((const char*)thisdentry->d_name.name,(const char*) "/")){//get the parents name, check that it isn't "/"
 			temp = (char*) kmalloc((strlen((const char*)thisdentry->d_name.name)+1)*sizeof(char),GFP_KERNEL);
 			sprintf(temp, "%s", thisdentry->d_name.name);
@@ -47,6 +52,7 @@ void freezerfunction(struct file* fp, char type){
 		if(strcmp(((const char*) FREEZEDIRNAME), ((const char*) temp))){
 			return;
 		}
+		
 		memset(fname_buf, 0, sizeof(char)*PATH_MAX);
 		while ((temp = ks_pop(path_stack))!=NULL){
 			fname_buf = strcat(fname_buf,(const char*) "/");
@@ -57,12 +63,14 @@ void freezerfunction(struct file* fp, char type){
 		}
 		//printk("%s\n", fname_buf);
 		ks_delete(path_stack);
-		logstring = kmalloc(sizeof(char)*(strlen(fname_buf)+4), GFP_KERNEL);
+		
+		char* logstring = kmalloc(sizeof(char)*(strlen(fname_buf)+4), GFP_KERNEL);
 		sprintf(logstring, (const char*) LOG_FORMAT, type, fname_buf);
 		kfree(fname_buf);
-		printk("%s\n",logstring);
+		printk("logged%s\n",logstring);
+		
 		//kq_enqueue(fname_queue,logstring); //this is throwing a segfault
-			//enqueue waitqueue here
+		//enqueue waitqueue here
 	}
 	return;
 }
