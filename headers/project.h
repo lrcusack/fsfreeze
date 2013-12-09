@@ -6,7 +6,9 @@
 
 #define CHARDEV_NAME "/dev/chardev"
 #define FREEZEDIR "/freezer/"
+#define FREEZEDIRNAME "freezer"
 #define RESTOREDIR "/freezer_restore/"
+#define RESTOREDIRNAME "freezer_restore"
 #define LOG_NAME "/freezer_restore/logfile.txt"
 #define LOG_FILE "logfile.txt"
 #define LOG_FORMAT " %c %s"

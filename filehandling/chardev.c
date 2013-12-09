@@ -53,7 +53,7 @@ void freezerfunction(struct file* fp, char type){
 		printk("%s\n",temp);
 		thisdentry = dget(thisdentry->d_parent);
 	}
-	//printk("%s %s\n", FREEZEDIR, thisdentry->d_name.name);
+	printk("%s %s\n", FREEZEDIRNAME, (const char*)temp);
 	//if(!strcmp(FREEZEDIR, thisdentry->d_name.name)){
 	//	printk("parsing filename\n"); 
 		
