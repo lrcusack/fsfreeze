@@ -12,7 +12,7 @@
 #include "helper.h"
 
 
-#define TEST
+//#define TEST
 
 int main(){
 #ifdef TEST	

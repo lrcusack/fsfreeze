@@ -1,13 +1,9 @@
 chardev.c
-chardev.c~
 chardev.h
-chardev.h~
 chardev.ko
 chardev.mod.c
 chardev.mod.o
 chardev.o
-chardev.y~
-chardev.z~
 commented_Code.c
 dentrysearch.txt
 filesearch.txt
@@ -15,13 +11,10 @@ insert.sh
 junk.txt
 list_tester.c
 Makefile
-Makefile~
 Module.symvers
 remove.sh
 setup
-setup~
 tchardev.c
 tchardev.h
 tester
 tester.c
-tester.c~
