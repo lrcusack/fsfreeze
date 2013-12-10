@@ -28,29 +28,52 @@ void helper(){
 	char* fname;
 	char readbuf[BUFLEN];
 	char namebuf[BUFLEN];
-	char donebuf[BUFLEN];
-	sprintf(donebuf, "jobsdone");
+	char donebuf[2];
+	llqueue* changelist;
+	sprintf(donebuf, "X");
 	char type;
 	int fd = open(CHARDEV_NAME, O_RDWR);
 	
-
+	changelist = ll_create();
 	while(1){
 		while(read(fd,readbuf,BUFLEN)==0){
 			//printf("waiting\n");
 		}
 		 //parse buf
 		 //printf("did a read\n");
-		sscanf(readbuf, LOG_FORMAT, &type, namebuf);
-		printf("%c %s\n", type, namebuf);
-		fname = (char*) malloc( strlen(namebuf) * sizeof(char) );
-		sprintf( fname, namebuf);
-		printf("handling change: %c for file: %s\n", type, fname);
-		handle_change( type, fname );
+		if(!isInList(&changelist, readbuf)){
+			sscanf(readbuf, LOG_FORMAT, &type, namebuf);
+			printf("%c %s\n", type, namebuf);
+			fname = (char*) malloc( strlen(namebuf) * sizeof(char) );
+			sprintf( fname, namebuf);
+			printf("handling change: %c for file: %s\n", type, fname);
+			handle_change( type, fname );
+		}
 		write(fd, donebuf, BUFLEN);
 		
 	}
+	ll_delete(changelist);
 	
 	return; //NEVAAHHHHHHHH
+}
+
+int isInList(llqueue** fnames_addr, char* newname){
+	
+	llqueue* fnames = *fnames_addr;
+	int found = 0;
+	llqueue* temp = ll_create();
+	char* thisname;
+	
+	while(ll_isnonempty(fnames)){
+		thisname = ll_dequeue(fnames);
+		if(!strcmp(thisname,newname)){
+			found=1;
+		}
+		ll_enqueue(temp, thisname);
+	}
+	*fnames_addr = temp;
+	
+	return found;
 }
 
 void handle_change(char type, char* file_name){

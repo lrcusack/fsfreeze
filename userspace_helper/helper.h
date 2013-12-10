@@ -1,4 +1,5 @@
 #include "../headers/project.h"
+#include "../headers/list.h"
 #include<stdlib.h>
 #include<stdio.h>
 #include<string.h>
@@ -12,3 +13,5 @@ void make_clean_copy(char type, char* file_name);
 void handle_change(char type, char* file_name);
 void helper();
 void testerfct();
+int isInList(llqueue** fnames_addr, char* newname);
+

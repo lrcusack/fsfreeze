@@ -88,3 +88,7 @@ static inline void* ll_dequeue( llqueue *ll){
 
 	//for edge case were list is empty, return 0
 }
+
+static inline int ll_isnonempty(llqueue* ll){
+	return ll->length;
+}
