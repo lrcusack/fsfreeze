@@ -1,1 +1,1 @@
-cmd_/root/fsfreeze/filehandling/chardev.ko := ld -m elf_i386 -m elf_i386 -r -o /root/fsfreeze/filehandling/chardev.ko /root/fsfreeze/filehandling/chardev.o /root/fsfreeze/filehandling/chardev.mod.o
+cmd_/root/fsfreeze/liamstuff/chardev.ko := ld -m elf_i386 -m elf_i386 -r -o /root/fsfreeze/liamstuff/chardev.ko /root/fsfreeze/liamstuff/chardev.o /root/fsfreeze/liamstuff/chardev.mod.o

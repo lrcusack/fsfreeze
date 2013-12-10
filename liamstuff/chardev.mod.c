@@ -18,13 +18,13 @@ __attribute_used__
 __attribute__((section("__versions"))) = {
 	{ 0xb499ef18, "struct_module" },
 	{ 0x12da5bb2, "__kmalloc" },
-	{ 0x1d26aa98, "sprintf" },
 	{ 0x19070091, "kmem_cache_alloc" },
 	{ 0xab978df6, "malloc_sizes" },
-	{ 0xdcef6636, "wake_up_process" },
-	{ 0x37a0cba, "kfree" },
 	{ 0x1e8e5fac, "register_chrdev" },
+	{ 0x1d26aa98, "sprintf" },
+	{ 0xdcef6636, "wake_up_process" },
 	{ 0x1b7d4074, "printk" },
+	{ 0x37a0cba, "kfree" },
 	{ 0x5640e49e, "freezer" },
 	{ 0xc192d491, "unregister_chrdev" },
 };
@@ -35,4 +35,4 @@ __attribute__((section(".modinfo"))) =
 "depends=";
 
 
-MODULE_INFO(srcversion, "5D46399CD61124F8FFA0BF7");
+MODULE_INFO(srcversion, "8FA10715021687A94AAC201");

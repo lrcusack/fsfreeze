@@ -1,2 +1,2 @@
-/root/fsfreeze/filehandling/chardev.ko
-/root/fsfreeze/filehandling/chardev.o
+/root/fsfreeze/liamstuff/chardev.ko
+/root/fsfreeze/liamstuff/chardev.o

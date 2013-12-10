@@ -32,14 +32,6 @@ void freezerfunction(struct file* fp, char type){
 	
 	if(!strcmp((const char*) thisdentry->d_name.name, (const char*)"junk.txt")){
 		
-		while(strcmp((const char*)thisdentry->d_name.name,(const char*) "/")){//get the parents name, check that it isn't "/"
-			temp = (char*) kmalloc((strlen((const char*)thisdentry->d_name.name)+1)*sizeof(char),GFP_KERNEL);
-			sprintf(temp, "%s", thisdentry->d_name.name);
-			ks_push(path_stack,(void*) temp);
-			//printk("%s\n",temp);
-			thisdentry = dget(thisdentry->d_parent);
-		}
-		
 		char* fname_buf = (char*) kmalloc(sizeof(char)*PATH_MAX, GFP_KERNEL);
 
 		while(strcmp((const char*)thisdentry->d_name.name,(const char*) "/")){//get the parents name, check that it isn't "/"
@@ -69,6 +61,8 @@ void freezerfunction(struct file* fp, char type){
 		kfree(fname_buf);
 		printk("logged%s\n",logstring);
 		
+		
+		kq_enqueue(fname_queue,"wuddup");
 		//kq_enqueue(fname_queue,logstring); //this is throwing a segfault
 		//enqueue waitqueue here
 	}
@@ -77,14 +71,13 @@ void freezerfunction(struct file* fp, char type){
 
 
 static int device_open(struct inode *inode, struct file *file){
-	fname_queue = kq_create();
 	try_module_get(THIS_MODULE);
 	return 0;
 }
 
 
 static int device_release(struct inode *inode, struct file *file){
-	kq_delete(fname_queue);
+	
 	
 	module_put(THIS_MODULE);
 	return 0;
@@ -117,7 +110,7 @@ static ssize_t device_read(struct file *filp, char *buffer, size_t len, loff_t *
 int init_module(void){
 
 	Major = register_chrdev(0, DEVICE_NAME, &fops);
-	
+	fname_queue = kq_create();
 	freezer = &freezerfunction;
 	
 	if (Major < 0) {
@@ -130,8 +123,11 @@ return 0;
 }
 
 void cleanup_module(void){
+	
 	int ret = unregister_chrdev(Major, DEVICE_NAME);
 	freezer = NULL;
+	kq_delete(fname_queue);
+	
 	if (ret < 0)
 		printk(KERN_ALERT "Error in unregister_chrdev: %d\n", ret);
 }
