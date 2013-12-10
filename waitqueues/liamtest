@@ -1,0 +1,6 @@
+#!/bin/bash
+dmesg -c
+cd
+cd ..
+ls > /freezer/one/two/three/junk.txt
+dmesg

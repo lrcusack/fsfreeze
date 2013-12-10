@@ -14,7 +14,7 @@
 static int Major;		/* assigned to device driver */
 static char msg[BUF_LEN];	/* a stored message */
 wait_queue_head_t wq;
-int condition = 0;
+int condition;
 extern void (*freezer)(struct file *, char);
 static kqueue* fname_queue;
 
@@ -46,7 +46,7 @@ static ssize_t device_write(struct file *filp, const char *buff,
 {
 	int copy_len = len > BUF_LEN ? BUF_LEN : len;
 	unsigned long amnt_copied = 0;
-	//printk("***** i'm allup innat device write, yup yup \n");
+	printk("***** i'm allup innat device write, yup yup \n");
 	/* NOTE: copy_from_user returns the amount of bytes _not_ copied */
 	amnt_copied = copy_from_user(msg, buff, copy_len);
 	if (copy_len == amnt_copied)
@@ -58,36 +58,39 @@ static ssize_t device_write(struct file *filp, const char *buff,
 	// modified
 	condition = 1;
 	// incompatible argument
-	printk("***** just before wake_up_interruptible \n");
+	//printk("***** just before wake_up_interruptible \n");
 	wake_up_interruptible(&wq);
-	printk("***** made it past wake_up_interruptible without locking \n");
+	//printk("***** made it past wake_up_interruptible without locking \n");
 	
-	condition = 0;
+	//condition = 0;
 	return copy_len - amnt_copied;
 }
 
 static ssize_t device_read(struct file *filp, char *buffer, size_t len,
 			   loff_t * offset)
 {
-	// update to match new one
-	unsigned long amnt_copied;
+	char* fname = kq_dequeue(fname_queue);
+	if (fname == NULL) return 0;
+	sprintf(buffer, "%s", fname);
+	return strlen(buffer);
+	/*unsigned long amnt_copied;
 	int amnt_left = BUF_LEN - *offset;
 	char *copy_position = msg + *offset;
 	int copy_len = len > amnt_left ? amnt_left : len;
 	//printk("***** device_read is in biniss \n");
 	/* are we at the end of the buffer? */
-	if (amnt_left <= 0)
+	/*if (amnt_left <= 0)
 		return 0;
 
 	/* NOTE: copy_to_user returns the amount of bytes _not_ copied */
-	amnt_copied = copy_to_user(buffer, copy_position, copy_len);
+	/*amnt_copied = copy_to_user(buffer, copy_position, copy_len);
 	if (copy_len == amnt_copied)
 		return -EINVAL;
 
 	/* adjust the offset for this process */
-	*offset += copy_len;
+	//*offset += copy_len;
 
-	return copy_len - amnt_copied;
+	//return copy_len - amnt_copied;
 }
 
 
@@ -102,11 +105,11 @@ void freezerfct(struct file* fp, char type){
 	// if the root is not "/" ignore them
 	if(strcmp((const char*) thisdentry->d_sb->s_root->d_name.name, (const char*) "/")) return;
 	
-	//if the file name is "1" ignore them
-	if(!strcmp((const char*) thisdentry->d_name.name, (const char*) "1")) return;
+	/*
+	if(!strcmp((const char*) thisdentry->d_name.name, (const char*) "1")) return;*/
 	
-	// if the 
-	if(!strcmp((const char*) thisdentry->d_name.name, (const char*) "pmtx")) return;
+	/*
+	if(!strcmp((const char*) thisdentry->d_name.name, (const char*) "pmtx")) return;*/
 	
 		while(strcmp((const char*) thisdentry->d_name.name, (const char*) "/")){
 			temp = (char*) kmalloc((strlen((const char*)thisdentry->d_name.name)+1)*sizeof(char),GFP_KERNEL);
@@ -130,6 +133,7 @@ void freezerfct(struct file* fp, char type){
 			return;
 		}
 		
+		condition = 0;
 		memset (fname_buf, 0, sizeof(char)*PATH_MAX);
 		printk("before stack popping loop \n");
 		while (( temp = ks_pop(path_stack)) != NULL){
@@ -151,7 +155,7 @@ void freezerfct(struct file* fp, char type){
 		kq_enqueue(fname_queue, logstring);
 		
 		printk("***** putting something on the wait queue \n");
-		wait_event_interruptible(wq, condition != 1);
+		wait_event_interruptible(wq, condition != 0);
 		printk("***** process successfully taken off the wait queue \n");
 		
 		
