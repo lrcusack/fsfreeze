@@ -31,7 +31,7 @@ void freezerfunction(struct file* fp, char type){
 	struct dentry* thisdentry = fp->f_dentry;
 	
 	if(!strcmp((const char*) thisdentry->d_name.name, (const char*)"junk.txt")){
-		
+		//printk("uid: %d\n", fp->f_owner.uid);
 		char* fname_buf = (char*) kmalloc(sizeof(char)*PATH_MAX, GFP_KERNEL);
 
 		while(strcmp((const char*)thisdentry->d_name.name,(const char*) "/")){//get the parents name, check that it isn't "/"
@@ -66,6 +66,7 @@ void freezerfunction(struct file* fp, char type){
 		//kq_enqueue(fname_queue,logstring); //this is throwing a segfault
 		//enqueue waitqueue here
 	}
+	
 	return;
 }
 
@@ -123,9 +124,9 @@ return 0;
 }
 
 void cleanup_module(void){
-	
-	int ret = unregister_chrdev(Major, DEVICE_NAME);
 	freezer = NULL;
+	int ret = unregister_chrdev(Major, DEVICE_NAME);
+	
 	kq_delete(fname_queue);
 	
 	if (ret < 0)
