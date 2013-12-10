@@ -175,8 +175,10 @@ int init_module(void)
 	
 	// initialize the wait_queue, print statement for debugging
 	//incompatible argument
-	printk("***** initialize the wait queue \n");
+	fname_queue = kq_create();
+	printk("***** kqueue has been created \n");
 	init_waitqueue_head(&wq);
+	printk("***** wait queue initialized \n");
 	//printk("*****wait_queue has been initialized \n");
 	printk("***** device all initialized n wutevuh \n");
 	if (Major < 0) {

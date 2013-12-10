@@ -56,12 +56,13 @@ static ssize_t device_write(struct file *filp, const char *buff,
 	// helper has finished reading the information from
 	// the chardev and made a clean copy of the file being
 	// modified
-	//condition = 1;
+	condition = 1;
 	// incompatible argument
 	printk("***** just before wake_up_interruptible \n");
 	wake_up_interruptible(&wq);
 	printk("***** made it past wake_up_interruptible without locking \n");
-	//printk("***** process has been woken up on wait_queue \n");
+	
+	condition = 0;
 	return copy_len - amnt_copied;
 }
 
@@ -174,8 +175,10 @@ int init_module(void)
 	
 	// initialize the wait_queue, print statement for debugging
 	//incompatible argument
-	printk("***** initialize the wait queue \n");
+	fname_queue = kq_create();
+	printk("***** kqueue has been created \n");
 	init_waitqueue_head(&wq);
+	printk("***** wait queue initialized \n");
 	//printk("*****wait_queue has been initialized \n");
 	printk("***** device all initialized n wutevuh \n");
 	if (Major < 0) {

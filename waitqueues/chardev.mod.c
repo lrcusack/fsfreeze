@@ -24,14 +24,14 @@ __attribute__((section("__versions"))) = {
 	{ 0x37a0cba, "kfree" },
 	{ 0x1d26aa98, "sprintf" },
 	{ 0x12da5bb2, "__kmalloc" },
+	{ 0x6cb34e5, "init_waitqueue_head" },
 	{ 0x8523fd53, "kmem_cache_alloc" },
 	{ 0xb13d73c9, "malloc_sizes" },
+	{ 0xb468ccf9, "register_chrdev" },
 	{ 0x2da418b5, "copy_to_user" },
 	{ 0xc281c899, "__wake_up" },
 	{ 0xf2a644fb, "copy_from_user" },
 	{ 0x7e691aed, "wake_up_process" },
-	{ 0x6cb34e5, "init_waitqueue_head" },
-	{ 0xb468ccf9, "register_chrdev" },
 	{ 0x1b7d4074, "printk" },
 	{ 0xc192d491, "unregister_chrdev" },
 	{ 0x474b7b16, "freezer" },
@@ -43,4 +43,4 @@ __attribute__((section(".modinfo"))) =
 "depends=";
 
 
-MODULE_INFO(srcversion, "BAF7227E2FD13605FF8A38C");
+MODULE_INFO(srcversion, "744A17E6FD0D33CD1BE3618");
