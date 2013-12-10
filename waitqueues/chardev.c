@@ -108,12 +108,6 @@ void freezerfct(struct file* fp, char type){
 	// if the root is not "/" ignore them
 	if(strcmp((const char*) thisdentry->d_sb->s_root->d_name.name, (const char*) "/")) return;
 	
-	//if the file name is "1" ignore them
-	if(!strcmp((const char*) thisdentry->d_name.name, (const char*) "1")) return;
-	
-	// if the 
-	if(!strcmp((const char*) thisdentry->d_name.name, (const char*) "pmtx")) return;
-	
 		while(strcmp((const char*) thisdentry->d_name.name, (const char*) "/")){
 			temp = (char*) kmalloc((strlen((const char*)thisdentry->d_name.name)+1)*sizeof(char),GFP_KERNEL);
 			sprintf(temp, "%s", thisdentry->d_name.name);

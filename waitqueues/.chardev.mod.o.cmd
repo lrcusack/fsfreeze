@@ -1,7 +1,7 @@
-cmd_/root/wd/waitqueues/chardev.mod.o := gcc -m32 -Wp,-MD,/root/wd/waitqueues/.chardev.mod.o.d  -nostdinc -isystem /usr/lib/gcc/i386-redhat-linux/4.1.1/include -D__KERNEL__ -Iinclude  -include include/linux/autoconf.h -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Os -pipe -msoft-float -mpreferred-stack-boundary=2  -march=i686 -mtune=generic -mregparm=3 -ffreestanding -Iinclude/asm-i386/mach-default -fomit-frame-pointer -g  -fno-stack-protector -Wdeclaration-after-statement -Wno-pointer-sign    -D"KBUILD_STR(s)=\#s" -D"KBUILD_BASENAME=KBUILD_STR(chardev.mod)"  -D"KBUILD_MODNAME=KBUILD_STR(chardev)" -DMODULE -c -o /root/wd/waitqueues/chardev.mod.o /root/wd/waitqueues/chardev.mod.c
+cmd_/root/fsfreeze/waitqueues/chardev.mod.o := gcc -m32 -Wp,-MD,/root/fsfreeze/waitqueues/.chardev.mod.o.d  -nostdinc -isystem /usr/lib/gcc/i386-redhat-linux/4.1.1/include -D__KERNEL__ -Iinclude  -include include/linux/autoconf.h -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Os -pipe -msoft-float -mpreferred-stack-boundary=2  -march=i686 -mtune=generic -mregparm=3 -ffreestanding -Iinclude/asm-i386/mach-generic -Iinclude/asm-i386/mach-default -fomit-frame-pointer -g  -fno-stack-protector -Wdeclaration-after-statement -Wno-pointer-sign    -D"KBUILD_STR(s)=\#s" -D"KBUILD_BASENAME=KBUILD_STR(chardev.mod)"  -D"KBUILD_MODNAME=KBUILD_STR(chardev)" -DMODULE -c -o /root/fsfreeze/waitqueues/chardev.mod.o /root/fsfreeze/waitqueues/chardev.mod.c
 
-deps_/root/wd/waitqueues/chardev.mod.o := \
-  /root/wd/waitqueues/chardev.mod.c \
+deps_/root/fsfreeze/waitqueues/chardev.mod.o := \
+  /root/fsfreeze/waitqueues/chardev.mod.c \
     $(wildcard include/config/module/unload.h) \
   include/linux/module.h \
     $(wildcard include/config/modules.h) \
@@ -138,12 +138,14 @@ deps_/root/wd/waitqueues/chardev.mod.o := \
     $(wildcard include/config/debug/locking/api/selftests.h) \
   include/linux/stacktrace.h \
     $(wildcard include/config/stacktrace.h) \
-  include/linux/spinlock_types_up.h \
-  include/linux/spinlock_up.h \
-  include/linux/spinlock_api_up.h \
+  include/asm/spinlock_types.h \
+  include/asm/spinlock.h \
+    $(wildcard include/config/x86/ppro/fence.h) \
   include/asm/atomic.h \
     $(wildcard include/config/m386.h) \
   include/asm-generic/atomic.h \
+  include/asm/rwlock.h \
+  include/linux/spinlock_api_smp.h \
   include/asm/current.h \
   include/linux/timex.h \
     $(wildcard include/config/time/interpolation.h) \
@@ -178,6 +180,32 @@ deps_/root/wd/waitqueues/chardev.mod.o := \
   include/asm/cputime.h \
   include/asm-generic/cputime.h \
   include/linux/smp.h \
+  include/asm/smp.h \
+    $(wildcard include/config/x86/local/apic.h) \
+    $(wildcard include/config/x86/io/apic.h) \
+  include/asm/fixmap.h \
+    $(wildcard include/config/highmem.h) \
+    $(wildcard include/config/x86/visws/apic.h) \
+    $(wildcard include/config/x86/f00f/bug.h) \
+    $(wildcard include/config/x86/cyclone/timer.h) \
+    $(wildcard include/config/acpi.h) \
+    $(wildcard include/config/pci/mmconfig.h) \
+  include/asm/acpi.h \
+    $(wildcard include/config/acpi/sleep.h) \
+  include/acpi/pdc_intel.h \
+  include/asm/apicdef.h \
+  include/asm/kmap_types.h \
+    $(wildcard include/config/debug/highmem.h) \
+  include/asm/mpspec.h \
+  include/asm/mpspec_def.h \
+  include/asm-i386/mach-generic/mach_mpspec.h \
+  include/asm/io_apic.h \
+    $(wildcard include/config/pci/msi.h) \
+  include/asm/apic.h \
+    $(wildcard include/config/x86/good/apic.h) \
+  include/linux/pm.h \
+  include/asm-i386/mach-generic/mach_apicdef.h \
+  include/asm/genapic.h \
   include/linux/sem.h \
     $(wildcard include/config/sysvipc.h) \
   include/linux/ipc.h \
@@ -249,7 +277,6 @@ deps_/root/wd/waitqueues/chardev.mod.o := \
   include/linux/sysfs.h \
     $(wildcard include/config/sysfs.h) \
   include/linux/kref.h \
-  include/linux/pm.h \
   include/linux/stat.h \
   include/asm/stat.h \
   include/linux/kmod.h \
@@ -288,6 +315,6 @@ deps_/root/wd/waitqueues/chardev.mod.o := \
   include/linux/vermagic.h \
   include/linux/utsrelease.h \
 
-/root/wd/waitqueues/chardev.mod.o: $(deps_/root/wd/waitqueues/chardev.mod.o)
+/root/fsfreeze/waitqueues/chardev.mod.o: $(deps_/root/fsfreeze/waitqueues/chardev.mod.o)
 
-$(deps_/root/wd/waitqueues/chardev.mod.o):
+$(deps_/root/fsfreeze/waitqueues/chardev.mod.o):
