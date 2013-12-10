@@ -4,7 +4,7 @@
  * @author Liam Cusack
  */
 
-#define CHARDEV_NAME "/dev/freeze"
+#define CHARDEV_NAME "/dev/chardev"
 #define FREEZEDIR "/freezer/"
 #define FREEZEDIRNAME "freezer"
 #define RESTOREDIR "/freezer_restore/"

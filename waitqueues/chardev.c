@@ -69,28 +69,31 @@ static ssize_t device_write(struct file *filp, const char *buff,
 static ssize_t device_read(struct file *filp, char *buffer, size_t len,
 			   loff_t * offset)
 {
-	char* fname = kq_dequeue(fname_queue);
-	if (fname == NULL) return 0;
-	sprintf(buffer, "%s", fname);
-	return strlen(buffer);
-	/*unsigned long amnt_copied;
+	// update to match new
+	
+	unsigned long amnt_copied;
 	int amnt_left = BUF_LEN - *offset;
 	char *copy_position = msg + *offset;
 	int copy_len = len > amnt_left ? amnt_left : len;
 	//printk("***** device_read is in biniss \n");
-	/* are we at the end of the buffer? */
-	/*if (amnt_left <= 0)
+	//are we at the end of the buffer?
+	char *fname = kq_dequeue(fname_queue);
+	if (fname == NULL) return 0;
+	sprintf(buffer,"%s", fname);
+	return 1;
+	/*
+	if (amnt_left <= 0)
 		return 0;
 
-	/* NOTE: copy_to_user returns the amount of bytes _not_ copied */
-	/*amnt_copied = copy_to_user(buffer, copy_position, copy_len);
+	// NOTE: copy_to_user returns the amount of bytes _not_ copied
+	amnt_copied = copy_to_user(buffer, copy_position, copy_len);
 	if (copy_len == amnt_copied)
 		return -EINVAL;
 
-	/* adjust the offset for this process */
-	//*offset += copy_len;
+	// adjust the offset for this process
+	*offset += copy_len;
 
-	//return copy_len - amnt_copied;
+	return copy_len - amnt_copied;*/
 }
 
 
@@ -105,11 +108,11 @@ void freezerfct(struct file* fp, char type){
 	// if the root is not "/" ignore them
 	if(strcmp((const char*) thisdentry->d_sb->s_root->d_name.name, (const char*) "/")) return;
 	
-	/*
-	if(!strcmp((const char*) thisdentry->d_name.name, (const char*) "1")) return;*/
+	//if the file name is "1" ignore them
+	if(!strcmp((const char*) thisdentry->d_name.name, (const char*) "1")) return;
 	
-	/*
-	if(!strcmp((const char*) thisdentry->d_name.name, (const char*) "pmtx")) return;*/
+	// if the 
+	if(!strcmp((const char*) thisdentry->d_name.name, (const char*) "pmtx")) return;
 	
 		while(strcmp((const char*) thisdentry->d_name.name, (const char*) "/")){
 			temp = (char*) kmalloc((strlen((const char*)thisdentry->d_name.name)+1)*sizeof(char),GFP_KERNEL);

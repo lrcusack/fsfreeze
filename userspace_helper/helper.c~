@@ -46,7 +46,7 @@ void helper(){
 		sprintf( fname, namebuf);
 		printf("handling change: %c for file: %s\n", type, fname);
 		handle_change( type, fname );
-		write(fd, donebuf, BUFLEN);
+		//write(fd, donebuf, BUFLEN);
 		
 	}
 	
