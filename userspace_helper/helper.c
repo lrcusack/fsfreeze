@@ -30,6 +30,7 @@ void helper(){
 	char namebuf[BUFLEN];
 	char donebuf[2];
 	llqueue* changelist;
+	char* logstring;
 	sprintf(donebuf, "X");
 	char type;
 	int fd = open(CHARDEV_NAME, O_RDWR);
@@ -42,6 +43,10 @@ void helper(){
 		 //parse buf
 		 //printf("did a read\n");
 		if(!isInList(&changelist, readbuf)){
+			logstring = (char*) malloc(sizeof(char)*(strlen(readbuf)+1));
+			sprintf(logstring, "%s", readbuf);
+			ll_enqueue(changelist, logstring);
+			
 			sscanf(readbuf, LOG_FORMAT, &type, namebuf);
 			printf("%c %s\n", type, namebuf);
 			fname = (char*) malloc( strlen(namebuf) * sizeof(char) );
@@ -92,6 +97,7 @@ void handle_change(char type, char* file_name){
 			make_clean_copy('D',file_name);
 			break;
 		}
+		free(file_name);
 }
 
 void write_to_log(char type, char* file_name){

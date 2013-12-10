@@ -1,8 +1,8 @@
-cmd_/root/fsfreeze/waitqueues/chardev.o := gcc -m32 -Wp,-MD,/root/fsfreeze/waitqueues/.chardev.o.d  -nostdinc -isystem /usr/lib/gcc/i386-redhat-linux/4.1.1/include -D__KERNEL__ -Iinclude  -include include/linux/autoconf.h -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Os -pipe -msoft-float -mpreferred-stack-boundary=2  -march=i686 -mtune=generic -mregparm=3 -ffreestanding -Iinclude/asm-i386/mach-generic -Iinclude/asm-i386/mach-default -fomit-frame-pointer -g  -fno-stack-protector -Wdeclaration-after-statement -Wno-pointer-sign   -DMODULE -D"KBUILD_STR(s)=\#s" -D"KBUILD_BASENAME=KBUILD_STR(chardev)"  -D"KBUILD_MODNAME=KBUILD_STR(chardev)" -c -o /root/fsfreeze/waitqueues/.tmp_chardev.o /root/fsfreeze/waitqueues/chardev.c
+cmd_/root/fsfreeze/chardev/chardev.o := gcc -m32 -Wp,-MD,/root/fsfreeze/chardev/.chardev.o.d  -nostdinc -isystem /usr/lib/gcc/i386-redhat-linux/4.1.1/include -D__KERNEL__ -Iinclude  -include include/linux/autoconf.h -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Os -pipe -msoft-float -mpreferred-stack-boundary=2  -march=i686 -mtune=generic -mregparm=3 -ffreestanding -Iinclude/asm-i386/mach-generic -Iinclude/asm-i386/mach-default -fomit-frame-pointer -g  -fno-stack-protector -Wdeclaration-after-statement -Wno-pointer-sign   -DMODULE -D"KBUILD_STR(s)=\#s" -D"KBUILD_BASENAME=KBUILD_STR(chardev)"  -D"KBUILD_MODNAME=KBUILD_STR(chardev)" -c -o /root/fsfreeze/chardev/.tmp_chardev.o /root/fsfreeze/chardev/chardev.c
 
-deps_/root/fsfreeze/waitqueues/chardev.o := \
-  /root/fsfreeze/waitqueues/chardev.c \
-  /root/fsfreeze/waitqueues/chardev.h \
+deps_/root/fsfreeze/chardev/chardev.o := \
+  /root/fsfreeze/chardev/chardev.c \
+  /root/fsfreeze/chardev/chardev.h \
   include/linux/kernel.h \
     $(wildcard include/config/preempt/voluntary.h) \
     $(wildcard include/config/debug/spinlock/sleep.h) \
@@ -347,10 +347,10 @@ deps_/root/fsfreeze/waitqueues/chardev.o := \
   include/asm/uaccess.h \
     $(wildcard include/config/x86/intel/usercopy.h) \
     $(wildcard include/config/x86/wp/works/ok.h) \
-  /root/fsfreeze/waitqueues/../headers/klist.h \
-  /root/fsfreeze/waitqueues/../headers/kstack.h \
-  /root/fsfreeze/waitqueues/../headers/project.h \
+  /root/fsfreeze/chardev/../headers/klist.h \
+  /root/fsfreeze/chardev/../headers/kstack.h \
+  /root/fsfreeze/chardev/../headers/project.h \
 
-/root/fsfreeze/waitqueues/chardev.o: $(deps_/root/fsfreeze/waitqueues/chardev.o)
+/root/fsfreeze/chardev/chardev.o: $(deps_/root/fsfreeze/chardev/chardev.o)
 
-$(deps_/root/fsfreeze/waitqueues/chardev.o):
+$(deps_/root/fsfreeze/chardev/chardev.o):

@@ -1,2 +1,2 @@
-/root/fsfreeze/waitqueues/chardev.ko
-/root/fsfreeze/waitqueues/chardev.o
+/root/fsfreeze/chardev/chardev.ko
+/root/fsfreeze/chardev/chardev.o
