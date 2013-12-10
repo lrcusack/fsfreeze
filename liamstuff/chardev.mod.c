@@ -24,8 +24,8 @@ __attribute__((section("__versions"))) = {
 	{ 0x1d26aa98, "sprintf" },
 	{ 0xdcef6636, "wake_up_process" },
 	{ 0x1b7d4074, "printk" },
-	{ 0x37a0cba, "kfree" },
 	{ 0xc192d491, "unregister_chrdev" },
+	{ 0x37a0cba, "kfree" },
 	{ 0x5640e49e, "freezer" },
 };
 
@@ -35,4 +35,4 @@ __attribute__((section(".modinfo"))) =
 "depends=";
 
 
-MODULE_INFO(srcversion, "22A5FE1E49BB8DD04489519");
+MODULE_INFO(srcversion, "DD822BDDA8816000B092728");

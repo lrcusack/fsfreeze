@@ -1,4 +1,5 @@
 #!/bin/bash
 dmesg -c
 ls > /freezer/one/two/three/junk.txt
+echo "----------results below-----------"
 dmesg

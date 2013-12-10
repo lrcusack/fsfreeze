@@ -24,48 +24,48 @@ static struct file_operations fops = {
 
 void freezerfunction(struct file* fp, char type){
 	char* temp = NULL;
-	
+	struct dentry* thisdentry = fp->f_dentry;
 	kstack* path_stack= ks_create();
 
+	if(strcmp((const char*)thisdentry->d_sb->s_root->d_name.name,(const char*) "/")) return;
+	if(!strcmp((const char*)thisdentry->d_name.name,(const char*) "1")) return;
+	if(!strcmp((const char*)thisdentry->d_name.name,(const char*) "pmtx")) return;
 	
-	struct dentry* thisdentry = fp->f_dentry;
-	
-	if(!strcmp((const char*) thisdentry->d_name.name, (const char*)"junk.txt")){
-		//printk("uid: %d\n", fp->f_owner.uid);
-		char* fname_buf = (char*) kmalloc(sizeof(char)*PATH_MAX, GFP_KERNEL);
+	//printk("uid: %d\n", fp->f_owner.uid);
+	char* fname_buf = (char*) kmalloc(sizeof(char)*PATH_MAX, GFP_KERNEL);
 
-		while(strcmp((const char*)thisdentry->d_name.name,(const char*) "/")){//get the parents name, check that it isn't "/"
-			temp = (char*) kmalloc((strlen((const char*)thisdentry->d_name.name)+1)*sizeof(char),GFP_KERNEL);
-			sprintf(temp, "%s", thisdentry->d_name.name);
-			ks_push(path_stack,(void*) temp);
-			//printk("%s\n",temp);
-			thisdentry = dget(thisdentry->d_parent);
-		}
-		if(strcmp(((const char*) FREEZEDIRNAME), ((const char*) temp))){
-			return;
-		}
-		
-		memset(fname_buf, 0, sizeof(char)*PATH_MAX);
-		while ((temp = ks_pop(path_stack))!=NULL){
-			fname_buf = strcat(fname_buf,(const char*) "/");
-			fname_buf = strcat(fname_buf,(const char*) temp);
-			//printk("%s\n", temp);
-			//printk("%s\n", fname_buf);
-			kfree(temp);
-		}
-		//printk("%s\n", fname_buf);
-		ks_delete(path_stack);
-		
-		char* logstring = kmalloc(sizeof(char)*(strlen(fname_buf)+4), GFP_KERNEL);
-		sprintf(logstring, (const char*) LOG_FORMAT, type, fname_buf);
-		kfree(fname_buf);
-		printk("logged%s\n",logstring);
-		
-		
-		kq_enqueue(fname_queue,"wuddup");
-		//kq_enqueue(fname_queue,logstring); //this is throwing a segfault
-		//enqueue waitqueue here
+	while(strcmp((const char*)thisdentry->d_name.name,(const char*) "/")){//get the parents name, check that it isn't "/"
+		temp = (char*) kmalloc((strlen((const char*)thisdentry->d_name.name)+1)*sizeof(char),GFP_KERNEL);
+		sprintf(temp, "%s", thisdentry->d_name.name);
+		ks_push(path_stack,(void*) temp);
+		//printk("%s\n",temp);
+		thisdentry = dget(thisdentry->d_parent);
 	}
+	if(strcmp(((const char*) FREEZEDIRNAME), ((const char*) temp))){
+		return;
+	}
+	
+	memset(fname_buf, 0, sizeof(char)*PATH_MAX);
+	while ((temp = ks_pop(path_stack))!=NULL){
+		fname_buf = strcat(fname_buf,(const char*) "/");
+		fname_buf = strcat(fname_buf,(const char*) temp);
+		//printk("%s\n", temp);
+		//printk("%s\n", fname_buf);
+		kfree(temp);
+	}
+	//printk("%s\n", fname_buf);
+	ks_delete(path_stack);
+	
+	char* logstring = kmalloc(sizeof(char)*(strlen(fname_buf)+4), GFP_KERNEL);
+	sprintf(logstring, (const char*) LOG_FORMAT, type, fname_buf);
+	kfree(fname_buf);
+	printk("logged%s\n",logstring);
+	
+	
+	kq_enqueue(fname_queue,"wuddup");
+	//kq_enqueue(fname_queue,logstring); //this is throwing a segfault
+	//enqueue waitqueue here
+	
 	
 	return;
 }
@@ -125,9 +125,10 @@ return 0;
 
 void cleanup_module(void){
 	freezer = NULL;
+	kq_delete(fname_queue);
 	int ret = unregister_chrdev(Major, DEVICE_NAME);
 	
-	kq_delete(fname_queue);
+	
 	
 	if (ret < 0)
 		printk(KERN_ALERT "Error in unregister_chrdev: %d\n", ret);
