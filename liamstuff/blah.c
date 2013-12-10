@@ -1,0 +1,11 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(){
+	int x;
+	printf("the value of x is %d \n", x);
+	void (*freezer)(struct file *f) = NULL;
+	printf("freezer points to %p \n", *freezer);
+	printf("freezer points to %p \n", freezer);
+	return 0;
+}
