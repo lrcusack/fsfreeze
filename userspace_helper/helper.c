@@ -33,18 +33,21 @@ void helper(){
 	char type;
 	int fd = open(CHARDEV_NAME, O_RDWR);
 	
+
 	while(1){
 		while(read(fd,readbuf,BUFLEN)==0){
 			//printf("waiting\n");
 		};
-		
-		//parse buf
+		 //parse buf
+		 //printf("did a read\n");
 		sscanf(readbuf, LOG_FORMAT, &type, namebuf);
+		printf("%c %s\n", type, namebuf);
 		fname = (char*) malloc( strlen(namebuf) * sizeof(char) );
 		sprintf( fname, namebuf);
-		
+		printf("handling change: %c for file: %s\n", type, fname);
 		handle_change( type, fname );
-		write(fd, donebuf, BUFLEN);
+		//write(fd, donebuf, BUFLEN);
+		
 	}
 	
 	return; //NEVAAHHHHHHHH
@@ -87,7 +90,8 @@ void write_to_log(char type, char* file_name){
 void make_clean_copy(char type, char* file_name){
 
 	char* output_file = malloc((strlen(RESTOREDIR)+strlen(file_name))*sizeof(char));
-	sprintf(output_file,"%s%s",RESTOREDIR, file_name);
+	
+	sprintf(output_file,"%s%s",RESTOREDIR, (file_name+strlen(FREEZEDIR)));
 	
 	FILE* copyfile;
 	
