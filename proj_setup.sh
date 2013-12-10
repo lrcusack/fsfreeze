@@ -8,7 +8,7 @@ mkdir /freezer
 mkdir /freezer_restore
 
 #set up chardev
-cd waitqueues
+cd chardev
 ./out.sh
 make clean
 make
