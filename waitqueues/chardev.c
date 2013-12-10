@@ -9,11 +9,15 @@
 #define _KERNEL_
 #define	EXPORT_SYMTAB*/
 /* Globals localized to file (by use of static */
+
+
 static int Major;		/* assigned to device driver */
 static char msg[BUF_LEN];	/* a stored message */
-wait_queue_head_t wait_queue;
+wait_queue_head_t wq;
 int condition = 0;
-extern void (*freezer)(struct file *);
+extern void (*freezer)(struct file *, char);
+static kqueue* fname_queue;
+
 //EXPORT_SYMBOL(freezer);
 
 static struct file_operations fops = {
@@ -42,7 +46,7 @@ static ssize_t device_write(struct file *filp, const char *buff,
 {
 	int copy_len = len > BUF_LEN ? BUF_LEN : len;
 	unsigned long amnt_copied = 0;
-	printk("***** i'm allup innat device write, yup yup \n");
+	//printk("***** i'm allup innat device write, yup yup \n");
 	/* NOTE: copy_from_user returns the amount of bytes _not_ copied */
 	amnt_copied = copy_from_user(msg, buff, copy_len);
 	if (copy_len == amnt_copied)
@@ -54,20 +58,23 @@ static ssize_t device_write(struct file *filp, const char *buff,
 	// modified
 	condition = 1;
 	// incompatible argument
-	// wake_up_interruptible(wait_queue);
-	//printk("***** process has been woken up on wait_queue \n");
+	printk("***** just before wake_up_interruptible \n");
+	wake_up_interruptible(&wq);
+	printk("***** made it past wake_up_interruptible without locking \n");
+	
+	condition = 0;
 	return copy_len - amnt_copied;
 }
 
 static ssize_t device_read(struct file *filp, char *buffer, size_t len,
 			   loff_t * offset)
 {
-	
+	// update to match new one
 	unsigned long amnt_copied;
 	int amnt_left = BUF_LEN - *offset;
 	char *copy_position = msg + *offset;
 	int copy_len = len > amnt_left ? amnt_left : len;
-	printk("***** device_read is in biniss \n");
+	//printk("***** device_read is in biniss \n");
 	/* are we at the end of the buffer? */
 	if (amnt_left <= 0)
 		return 0;
@@ -83,15 +90,79 @@ static ssize_t device_read(struct file *filp, char *buffer, size_t len,
 	return copy_len - amnt_copied;
 }
 
-// 
-void freezerfct(struct file* f){
+
+void freezerfct(struct file* fp, char type){
+	
+	char* temp = NULL;
+	
+	kstack* path_stack = ks_create();
+	
+	struct dentry* thisdentry = fp->f_dentry;
+	
+	// if the root is not "/" ignore them
+	if(strcmp((const char*) thisdentry->d_sb->s_root->d_name.name, (const char*) "/")) return;
+	
+	//if the file name is "1" ignore them
+	if(!strcmp((const char*) thisdentry->d_name.name, (const char*) "1")) return;
+	
+	// if the 
+	if(!strcmp((const char*) thisdentry->d_name.name, (const char*) "pmtx")) return;
+	
+		while(strcmp((const char*) thisdentry->d_name.name, (const char*) "/")){
+			temp = (char*) kmalloc((strlen((const char*)thisdentry->d_name.name)+1)*sizeof(char),GFP_KERNEL);
+			sprintf(temp, "%s", thisdentry->d_name.name);
+			ks_push(path_stack, (void*) temp);
+			//printk("%s\n", temp);
+			thisdentry = dget(thisdentry->d_parent);
+		}
+		
+		// this is above first while loop in Liam's version
+		char* fname_buf = (char*) kmalloc(sizeof(char)*PATH_MAX, GFP_KERNEL);
+		
+		// still duplicate while loop in Liam's latest push
+		//printk("***** moving along \n");
+		
+		// print top level directory	
+		//printk("***** %s\n", temp);
+		
+		// always just gets to here and returns, nothing below this is tested because we have not tried writing to files in our protected directory
+		if (strcmp (((const char*) FREEZEDIRNAME), ((const char*) temp))){
+			return;
+		}
+		
+		memset (fname_buf, 0, sizeof(char)*PATH_MAX);
+		printk("before stack popping loop \n");
+		while (( temp = ks_pop(path_stack)) != NULL){
+			printk("***** in the stack popping loop. \n");
+			fname_buf = strcat(fname_buf, (const char*) "/");
+			fname_buf = strcat(fname_buf, (const char*) temp);
+			printk("%s \n", fname_buf);
+			printk("%s \n", temp);
+			kfree(temp);
+		}
+		
+		ks_delete(path_stack);
+		
+		char* logstring = kmalloc(sizeof(char)*(strlen(fname_buf)+4), GFP_KERNEL);
+		sprintf(logstring, (const char*) LOG_FORMAT, type, fname_buf);
+		kfree(fname_buf);
+		printk("logged %s \n", logstring);
+		
+		kq_enqueue(fname_queue, logstring);
+		
+		printk("***** putting something on the wait queue \n");
+		wait_event_interruptible(wq, condition != 1);
+		printk("***** process successfully taken off the wait queue \n");
+		
+		
+		
 	// add the process calling sys_write to the wait_queue
 	// when freezerfct is called and condition = 0
-	printk("made it into the freezerfct \n");
+	//printk("***** made it into the freezerfct \n");
+	//printk("***** char param = %c \n", a);
 	//printk("*****a process has been added to the wait_queue \n");
-	//wait_event_interruptible(wait_queue, condition != 1);
-	//printk("*****process woken up, wake_up call not required \n");
 	
+	//printk("*****process woken up, wake_up call not required \n");
 	
 	
 	
@@ -104,7 +175,8 @@ int init_module(void)
 	
 	// initialize the wait_queue, print statement for debugging
 	//incompatible argument
-	//init_waitqueue_head(wait_queue);
+	printk("***** initialize the wait queue \n");
+	init_waitqueue_head(&wq);
 	//printk("*****wait_queue has been initialized \n");
 	printk("***** device all initialized n wutevuh \n");
 	if (Major < 0) {
@@ -122,6 +194,7 @@ int init_module(void)
 }
 void cleanup_module(void)
 {
+	freezer = NULL;
 	int ret = unregister_chrdev(Major, DEVICE_NAME);
 	if (ret < 0)
 		printk(KERN_ALERT "Error in unregister_chrdev: %d\n", ret);

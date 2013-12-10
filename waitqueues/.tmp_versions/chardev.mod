@@ -1,2 +1,2 @@
-/root/Desktop/project_testing/chardev.ko
-/root/Desktop/project_testing/chardev.o
+/root/wd/waitqueues/chardev.ko
+/root/wd/waitqueues/chardev.o

@@ -1,8 +1,8 @@
-cmd_/root/fsfreeze/filehandling/chardev.o := gcc -m32 -Wp,-MD,/root/fsfreeze/filehandling/.chardev.o.d  -nostdinc -isystem /usr/lib/gcc/i386-redhat-linux/4.1.1/include -D__KERNEL__ -Iinclude  -include include/linux/autoconf.h -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Os -pipe -msoft-float -mpreferred-stack-boundary=2  -march=i686 -mtune=generic -mregparm=3 -ffreestanding -Iinclude/asm-i386/mach-generic -Iinclude/asm-i386/mach-default -fomit-frame-pointer -g  -fno-stack-protector -Wdeclaration-after-statement -Wno-pointer-sign   -DMODULE -D"KBUILD_STR(s)=\#s" -D"KBUILD_BASENAME=KBUILD_STR(chardev)"  -D"KBUILD_MODNAME=KBUILD_STR(chardev)" -c -o /root/fsfreeze/filehandling/.tmp_chardev.o /root/fsfreeze/filehandling/chardev.c
+cmd_/root/wd/liamstuff/chardev.o := gcc -m32 -Wp,-MD,/root/wd/liamstuff/.chardev.o.d  -nostdinc -isystem /usr/lib/gcc/i386-redhat-linux/4.1.1/include -D__KERNEL__ -Iinclude  -include include/linux/autoconf.h  -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Wstrict-prototypes -Wundef -Werror-implicit-function-declaration -Os -pipe -msoft-float -fno-builtin-sprintf -fno-builtin-log2 -fno-builtin-puts  -mpreferred-stack-boundary=2  -march=i686 -mtune=generic -mtune=generic -mregparm=3 -ffreestanding -Iinclude/asm-i386/mach-generic -Iinclude/asm-i386/mach-default -fomit-frame-pointer -g  -fno-stack-protector -Wdeclaration-after-statement -Wno-pointer-sign   -DMODULE -D"KBUILD_STR(s)=\#s" -D"KBUILD_BASENAME=KBUILD_STR(chardev)"  -D"KBUILD_MODNAME=KBUILD_STR(chardev)" -c -o /root/wd/liamstuff/.tmp_chardev.o /root/wd/liamstuff/chardev.c
 
-deps_/root/fsfreeze/filehandling/chardev.o := \
-  /root/fsfreeze/filehandling/chardev.c \
-  /root/fsfreeze/filehandling/chardev.h \
+deps_/root/wd/liamstuff/chardev.o := \
+  /root/wd/liamstuff/chardev.c \
+  /root/wd/liamstuff/chardev.h \
   include/linux/kernel.h \
     $(wildcard include/config/preempt/voluntary.h) \
     $(wildcard include/config/debug/spinlock/sleep.h) \
@@ -59,6 +59,7 @@ deps_/root/fsfreeze/filehandling/chardev.o := \
     $(wildcard include/config/inotify/user.h) \
     $(wildcard include/config/schedstats.h) \
     $(wildcard include/config/task/delay/acct.h) \
+    $(wildcard include/config/utrace.h) \
     $(wildcard include/config/rt/mutexes.h) \
     $(wildcard include/config/debug/mutexes.h) \
     $(wildcard include/config/trace/irqflags.h) \
@@ -66,6 +67,7 @@ deps_/root/fsfreeze/filehandling/chardev.o := \
     $(wildcard include/config/numa.h) \
     $(wildcard include/config/cpusets.h) \
     $(wildcard include/config/compat.h) \
+    $(wildcard include/config/ptrace.h) \
     $(wildcard include/config/hotplug/cpu.h) \
     $(wildcard include/config/preempt.h) \
     $(wildcard include/config/pm.h) \
@@ -89,7 +91,6 @@ deps_/root/fsfreeze/filehandling/chardev.o := \
     $(wildcard include/config/hugetlb/page.h) \
     $(wildcard include/config/highmem4g.h) \
     $(wildcard include/config/page/offset.h) \
-    $(wildcard include/config/physical/start.h) \
     $(wildcard include/config/flatmem.h) \
   include/asm-generic/memory_model.h \
     $(wildcard include/config/discontigmem.h) \
@@ -133,6 +134,7 @@ deps_/root/fsfreeze/filehandling/chardev.o := \
     $(wildcard include/config/generic/hardirqs.h) \
     $(wildcard include/config/prove/locking.h) \
   include/linux/list.h \
+    $(wildcard include/config/debug/list.h) \
   include/linux/poison.h \
   include/linux/prefetch.h \
   include/linux/debug_locks.h \
@@ -157,8 +159,6 @@ deps_/root/fsfreeze/filehandling/chardev.o := \
   include/asm/tsc.h \
     $(wildcard include/config/x86/tsc.h) \
     $(wildcard include/config/x86/generic.h) \
-  include/linux/config.h \
-    $(wildcard include/config/h.h) \
   include/linux/jiffies.h \
   include/linux/calc64.h \
   include/asm/div64.h \
@@ -204,6 +204,7 @@ deps_/root/fsfreeze/filehandling/chardev.o := \
     $(wildcard include/config/pci/msi.h) \
   include/asm/apic.h \
     $(wildcard include/config/x86/good/apic.h) \
+    $(wildcard include/config/xen.h) \
   include/linux/pm.h \
   include/asm-i386/mach-generic/mach_apicdef.h \
   include/asm/genapic.h \
@@ -237,6 +238,7 @@ deps_/root/fsfreeze/filehandling/chardev.o := \
     $(wildcard include/config/need/multiple/nodes.h) \
     $(wildcard include/config/have/arch/early/pfn/to/nid.h) \
     $(wildcard include/config/sparsemem/extreme.h) \
+    $(wildcard include/config/nodes/span/other/nodes.h) \
   include/linux/init.h \
     $(wildcard include/config/hotplug.h) \
     $(wildcard include/config/acpi/hotplug/memory.h) \
@@ -347,10 +349,10 @@ deps_/root/fsfreeze/filehandling/chardev.o := \
   include/asm/uaccess.h \
     $(wildcard include/config/x86/intel/usercopy.h) \
     $(wildcard include/config/x86/wp/works/ok.h) \
-  /root/fsfreeze/filehandling/../headers/klist.h \
-  /root/fsfreeze/filehandling/../headers/kstack.h \
-  /root/fsfreeze/filehandling/../headers/project.h \
+  /root/wd/liamstuff/../headers/klist.h \
+  /root/wd/liamstuff/../headers/kstack.h \
+  /root/wd/liamstuff/../headers/project.h \
 
-/root/fsfreeze/filehandling/chardev.o: $(deps_/root/fsfreeze/filehandling/chardev.o)
+/root/wd/liamstuff/chardev.o: $(deps_/root/wd/liamstuff/chardev.o)
 
-$(deps_/root/fsfreeze/filehandling/chardev.o):
+$(deps_/root/wd/liamstuff/chardev.o):
